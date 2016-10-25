@@ -48,7 +48,8 @@ Options are passed to [node-sass].
 By default the plugin will base the filename for the css on the bundle destination.
 
 ```js
-vue({
+scss({
+  //Choose *one* of these possible "output:..." options
   // Default behaviour is to write all styles to the bundle destination where .js is replaced by .css
   output: true,
 
