@@ -71,8 +71,8 @@ export default function css(options = {}) {
         dest = dest + '.css'
       }
 
-      // Ensure the parent folders of dest exist (create the missing ones)
-      ensureParentDirsSync(dirname(dest));
+      // Ensure that dest parent folders exist (create the missing ones)
+      ensureParentDirsSync(dirname(dest))
 
       // Emit styles to file
       writeFile(dest, css, (err) => {
@@ -99,15 +99,15 @@ function getSize (bytes) {
 
 function ensureParentDirsSync (dir) {
   if (existsSync(dir)) {
-    return;
+    return
   }
 
   try {
-    mkdirSync(dir);
+    mkdirSync(dir)
   } catch (err) {
     if (err.code === 'ENOENT') {
-      ensureParentDirsSync(dirname(dir));
-      ensureParentDirsSync(dir);
+      ensureParentDirsSync(dirname(dir))
+      ensureParentDirsSync(dir)
     }
   }
 }
