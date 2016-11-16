@@ -1,4 +1,4 @@
-import { writeFile } from 'fs'
+import { existsSync, mkdirSync, writeFile } from 'fs'
 import { dirname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 import { renderSync } from 'node-sass'
@@ -71,6 +71,9 @@ export default function css(options = {}) {
         dest = dest + '.css'
       }
 
+      // Ensure the parent folders of dest exist (create the missing ones)
+      ensureParentDirsSync(dirname(dest));
+
       // Emit styles to file
       writeFile(dest, css, (err) => {
         if (err) {
@@ -92,4 +95,19 @@ function getSize (bytes) {
     : bytes < 1024000
     ? (bytes / 1024).toPrecision(3) + ' kB'
     : (bytes / 1024 / 1024).toPrecision(4) + ' MB'
+}
+
+function ensureParentDirsSync (dir) {
+  if (existsSync(dir)) {
+    return;
+  }
+
+  try {
+    mkdirSync(dir);
+  } catch (err) {
+    if (err.code === 'ENOENT') {
+      ensureParentDirsSync(dirname(dir));
+      ensureParentDirsSync(dir);
+    }
+  }
 }
