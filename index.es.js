@@ -1,10 +1,10 @@
 import { existsSync, mkdirSync, writeFile } from 'fs'
-import { dirname } from 'path'
+import { dirname, basename, extname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 import { renderSync } from 'node-sass'
 
-export default function css(options = {}) {
-  const filter = createFilter(options.include || ['**/*.css', '**/*.scss', '**/*.sass'], options.exclude);
+export default function css (options = {}) {
+  const filter = createFilter(options.include || ['**/*.css', '**/*.scss', '**/*.sass'], options.exclude)
   let dest = options.output
 
   const styles = {}
@@ -13,7 +13,7 @@ export default function css(options = {}) {
 
   return {
     name: 'css',
-    transform(code, id) {
+    transform (code, id) {
       if (!filter(id)) {
         return
       }
@@ -49,7 +49,7 @@ export default function css(options = {}) {
       css = renderSync(Object.assign({
         data: css,
         includePaths
-      }, options)).css.toString();
+      }, options)).css.toString()
 
       // Emit styles through callback
       if (typeof options.output === 'function') {
@@ -71,15 +71,18 @@ export default function css(options = {}) {
         dest = dest + '.css'
       }
 
+      const resolveId = opts.bundle.modules[opts.bundle.modules.length - 1].id
+      const destPath = dest.replace(/\[name]/, basename(resolveId, extname(resolveId)))
+
       // Ensure that dest parent folders exist (create the missing ones)
-      ensureParentDirsSync(dirname(dest))
+      ensureParentDirsSync(dirname(destPath))
 
       // Emit styles to file
-      writeFile(dest, css, (err) => {
+      writeFile(destPath, css, (err) => {
         if (err) {
           throw err
         }
-        console.log(green(dest), getSize(css.length))
+        console.log(green(destPath), getSize(css.length))
       })
     }
   }
