@@ -32,7 +32,7 @@ export default function css(options = {}) {
 
       return ''
     },
-    ongenerate (opts, rendered) {
+    ongenerate (opts) {
       // No stylesheet needed
       if (options.output === false) {
         return
@@ -75,11 +75,17 @@ export default function css(options = {}) {
       ensureParentDirsSync(dirname(dest))
 
       // Emit styles to file
-      writeFile(dest, css, (err) => {
-        if (err) {
-          throw err
-        }
-        console.log(green(dest), getSize(css.length))
+      return new Promise(function (resolve, reject) {
+        writeFile(dest, css, (err) => {
+          if (err) {
+            reject(err)
+          } else {
+            if (opts.verbose !== false) {
+              console.log(green(dest), getSize(css.length))
+            }
+            resolve()
+          }
+        })
       })
     }
   }
