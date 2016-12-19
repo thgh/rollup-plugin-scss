@@ -45,11 +45,13 @@ export default function css(options = {}) {
       }
 
       // Compile SASS to CSS
-      includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
-      css = renderSync(Object.assign({
-        data: css,
-        includePaths
-      }, options)).css.toString();
+      if (css.length) {
+        includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
+        css = renderSync(Object.assign({
+          data: css,
+          includePaths
+        }, options)).css.toString();
+      }
 
       // Emit styles through callback
       if (typeof options.output === 'function') {
