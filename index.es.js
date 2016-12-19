@@ -1,7 +1,6 @@
 import { existsSync, mkdirSync, writeFile } from 'fs'
 import { dirname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
-import { renderSync } from 'node-sass'
 
 export default function css(options = {}) {
   const filter = createFilter(options.include || ['**/*.css', '**/*.scss', '**/*.sass'], options.exclude);
@@ -47,7 +46,7 @@ export default function css(options = {}) {
       // Compile SASS to CSS
       if (css.length) {
         includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
-        css = renderSync(Object.assign({
+        css = require('node-sass').renderSync(Object.assign({
           data: css,
           includePaths
         }, options)).css.toString();
