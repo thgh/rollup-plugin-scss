@@ -46,10 +46,27 @@ export default function css(options = {}) {
 
       // Compile SASS to CSS
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
-      css = renderSync(Object.assign({
-        data: css,
-        includePaths
-      }, options)).css.toString();
+      if(options.stepByStep){
+        let dcss = ''
+        for(let id in styles){
+          dcss += styles[id]
+          try{
+            css = renderSync(Object.assign({
+              data: dcss,
+              includePaths
+            }, options)).css.toString();
+          }catch(e){
+            e.message += ' in file ' + id
+            throw e
+          }
+        }
+      }
+      else{
+        css = renderSync(Object.assign({
+          data: css,
+          includePaths
+        }, options)).css.toString();
+      }
 
       // Emit styles through callback
       if (typeof options.output === 'function') {
