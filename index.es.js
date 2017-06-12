@@ -43,6 +43,12 @@ export default function css(options = {}) {
       for (const id in styles) {
         css += styles[id] || ''
       }
+      
+      // node-sass will throw an error with "No input specified: provide a file name or a source string to process"
+      // if the css source is empty
+      if (options.ignoreEmpty && !css) {
+        return Promise.resolve();
+      }
 
       // Compile SASS to CSS
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
