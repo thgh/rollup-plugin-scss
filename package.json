@@ -33,7 +33,7 @@
     "index.es.js"
   ],
   "dependencies": {
-    "node-sass": "^3.10.1",
+    "node-sass": "^4.5.3",
     "rollup-pluginutils": "^1.5.2"
   },
   "devDependencies": {
