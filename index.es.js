@@ -46,10 +46,27 @@ export default function css(options = {}) {
       // Compile SASS to CSS
       if (css.length) {
         includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
-        css = require('node-sass').renderSync(Object.assign({
-          data: css,
-          includePaths
-        }, options)).css.toString();
+        try {
+          css = require('node-sass').renderSync(Object.assign({
+            data: css,
+            includePaths
+          }, options)).css.toString();
+        } catch (e) {
+          console.log();
+          console.log(red('Error:\n\t' + e.message));
+          if (e.message.includes('Invalid CSS')) {
+            console.log(green('Solution:\n\t' + 'fix your Sass code'))
+            console.log('Line:   ' + e.line)
+            console.log('Column: ' + e.column)
+          }
+          if (e.message.includes('node-sass') && e.message.includes('find module')) {
+            console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
+          }
+          if (e.message.includes('node-sass') && e.message.includes('bindigs')) {
+            console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
+          }
+          console.log();
+        }
       }
 
       // Emit styles through callback
@@ -92,8 +109,12 @@ export default function css(options = {}) {
   }
 }
 
+function red(text) {
+  return '\x1b[1m\x1b[31m' + text + '\x1b[0m'
+}
+
 function green (text) {
-  return '\u001b[1m\u001b[32m' + text + '\u001b[39m\u001b[22m'
+  return '\x1b[1m\x1b[32m' + text + '\x1b[0m'
 }
 
 function getSize (bytes) {
