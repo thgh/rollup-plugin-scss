@@ -64,7 +64,12 @@ scss({
   },
 
   // Disable any style output or callbacks, import as string
-  output: false
+  output: false,
+
+  // Should ignore empty css source, without this option node-sass will throw an error of:
+  // "No input specified: provide a file name or a source string to process"
+  // default is false
+  ignoreEmpty: true
 })
 ```
 
