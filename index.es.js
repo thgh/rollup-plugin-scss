@@ -52,6 +52,9 @@ export default function css(options = {}) {
             includePaths
           }, options)).css.toString();
         } catch (e) {
+          if (options.failOnError) {
+            throw e;
+          }
           console.log();
           console.log(red('Error:\n\t' + e.message));
           if (e.message.includes('Invalid CSS')) {

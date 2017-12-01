@@ -17,7 +17,7 @@
 <a href="https://github.com/thgh/rollup-plugin-scss/releases">
   <img src="https://img.shields.io/github/release/thgh/rollup-plugin-scss.svg" alt="Latest Version" />
 </a>
-  
+
 ## Installation
 ```
 npm install --save-dev rollup-plugin-scss
@@ -64,7 +64,10 @@ scss({
   },
 
   // Disable any style output or callbacks, import as string
-  output: false
+  output: false,
+
+  // Determine if node process should be terminated on error (default: false)
+  failOnError: true,
 })
 ```
 
