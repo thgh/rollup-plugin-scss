@@ -72,41 +72,51 @@ export default function css(options = {}) {
         }
       }
 
-      // Emit styles through callback
-      if (typeof options.output === 'function') {
-        options.output(css, styles)
-        return
+      // Possibly process CSS (e.g. by PostCSS)
+      let processedCss = css;
+      if (typeof options.processor === 'function') {
+        processedCss = options.processor(css, styles)
       }
 
-      if (typeof dest !== 'string') {
-        // Don't create unwanted empty stylesheets
-        if (!css.length) {
+      Promise.resolve(processedCss).then(css => {
+
+        // Emit styles through callback
+        if (typeof options.output === 'function') {
+          options.output(css, styles)
           return
         }
 
-        // Guess destination filename
-        dest = opts.dest || 'bundle.js'
-        if (dest.endsWith('.js')) {
-          dest = dest.slice(0, -3)
-        }
-        dest = dest + '.css'
-      }
-
-      // Ensure that dest parent folders exist (create the missing ones)
-      ensureParentDirsSync(dirname(dest))
-
-      // Emit styles to file
-      return new Promise(function (resolve, reject) {
-        writeFile(dest, css, (err) => {
-          if (err) {
-            reject(err)
-          } else {
-            if (opts.verbose !== false) {
-              console.log(green(dest), getSize(css.length))
-            }
-            resolve()
+        if (typeof dest !== 'string') {
+          // Don't create unwanted empty stylesheets
+          if (!css.length) {
+            return
           }
+
+          // Guess destination filename
+          dest = opts.dest || 'bundle.js'
+          if (dest.endsWith('.js')) {
+            dest = dest.slice(0, -3)
+          }
+          dest = dest + '.css'
+        }
+
+        // Ensure that dest parent folders exist (create the missing ones)
+        ensureParentDirsSync(dirname(dest))
+
+        // Emit styles to file
+        return new Promise(function (resolve, reject) {
+          writeFile(dest, css, (err) => {
+            if (err) {
+              reject(err)
+            } else {
+              if (opts.verbose !== false) {
+                console.log(green(dest), getSize(css.length))
+              }
+              resolve()
+            }
+          })
         })
+
       })
     }
   }
