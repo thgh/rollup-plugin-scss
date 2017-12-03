@@ -2,8 +2,8 @@ import { existsSync, mkdirSync, writeFile } from 'fs'
 import { dirname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 
-export default function css(options = {}) {
-  const filter = createFilter(options.include || ['**/*.css', '**/*.scss', '**/*.sass'], options.exclude);
+export default function css (options = {}) {
+  const filter = createFilter(options.include || ['**/*.css', '**/*.scss', '**/*.sass'], options.exclude)
   let dest = options.output
 
   const styles = {}
@@ -12,7 +12,7 @@ export default function css(options = {}) {
 
   return {
     name: 'css',
-    transform(code, id) {
+    transform (code, id) {
       if (!filter(id)) {
         return
       }
@@ -50,13 +50,13 @@ export default function css(options = {}) {
           css = require('node-sass').renderSync(Object.assign({
             data: css,
             includePaths
-          }, options)).css.toString();
+          }, options)).css.toString()
         } catch (e) {
           if (options.failOnError) {
-            throw e;
+            throw e
           }
-          console.log();
-          console.log(red('Error:\n\t' + e.message));
+          console.log()
+          console.log(red('Error:\n\t' + e.message))
           if (e.message.includes('Invalid CSS')) {
             console.log(green('Solution:\n\t' + 'fix your Sass code'))
             console.log('Line:   ' + e.line)
@@ -68,18 +68,17 @@ export default function css(options = {}) {
           if (e.message.includes('node-sass') && e.message.includes('bindigs')) {
             console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
           }
-          console.log();
+          console.log()
         }
       }
 
       // Possibly process CSS (e.g. by PostCSS)
-      let processedCss = css;
+      let processedCss = css
       if (typeof options.processor === 'function') {
         processedCss = options.processor(css, styles)
       }
 
       Promise.resolve(processedCss).then(css => {
-
         // Emit styles through callback
         if (typeof options.output === 'function') {
           options.output(css, styles)
@@ -116,13 +115,12 @@ export default function css(options = {}) {
             }
           })
         })
-
       })
     }
   }
 }
 
-function red(text) {
+function red (text) {
   return '\x1b[1m\x1b[31m' + text + '\x1b[0m'
 }
 
