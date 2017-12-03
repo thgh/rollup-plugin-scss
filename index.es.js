@@ -73,12 +73,12 @@ export default function css (options = {}) {
       }
 
       // Possibly process CSS (e.g. by PostCSS)
-      let processedCss = css
       if (typeof options.processor === 'function') {
-        processedCss = options.processor(css, styles)
+        css = options.processor(css, styles)
       }
 
-      Promise.resolve(processedCss).then(css => {
+      // Resolve if porcessor returned a Promise
+      Promise.resolve(css).then(css => {
         // Emit styles through callback
         if (typeof options.output === 'function') {
           options.output(css, styles)
@@ -103,17 +103,14 @@ export default function css (options = {}) {
         ensureParentDirsSync(dirname(dest))
 
         // Emit styles to file
-        return new Promise(function (resolve, reject) {
-          writeFile(dest, css, (err) => {
+        writeFile(dest, css, (err) => {
+          if (opts.verbose !== false) {
             if (err) {
-              reject(err)
+              console.error(red(err))
             } else {
-              if (opts.verbose !== false) {
-                console.log(green(dest), getSize(css.length))
-              }
-              resolve()
+              console.log(green(dest), getSize(css.length))
             }
-          })
+          }
         })
       })
     }
