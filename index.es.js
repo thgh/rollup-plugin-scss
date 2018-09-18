@@ -10,6 +10,42 @@ export default function css (options = {}) {
   let includePaths = options.includePaths || []
   includePaths.push(process.cwd())
 
+  const compileToCSS = function (scss) {
+    // Compile SASS to CSS
+    if (scss.length) {
+      includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
+      try {
+        const css = require('node-sass').renderSync(Object.assign({
+          data: scss,
+          includePaths
+        }, options)).css.toString()
+        // Possibly process CSS (e.g. by PostCSS)
+        if (typeof options.processor === 'function') {
+          return options.processor(css, styles)
+        }
+        return css
+      } catch (e) {
+        if (options.failOnError) {
+          throw e
+        }
+        console.log()
+        console.log(red('Error:\n\t' + e.message))
+        if (e.message.includes('Invalid CSS')) {
+          console.log(green('Solution:\n\t' + 'fix your Sass code'))
+          console.log('Line:   ' + e.line)
+          console.log('Column: ' + e.column)
+        }
+        if (e.message.includes('node-sass') && e.message.includes('find module')) {
+          console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
+        }
+        if (e.message.includes('node-sass') && e.message.includes('bindigs')) {
+          console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
+        }
+        console.log()
+      }
+    }
+  }
+
   return {
     name: 'css',
     transform (code, id) {
@@ -19,8 +55,9 @@ export default function css (options = {}) {
 
       // When output is disabled, the stylesheet is exported as a string
       if (options.output === false) {
+        const css = compileToCSS(code)
         return {
-          code: 'export default ' + JSON.stringify(code),
+          code: 'export default ' + JSON.stringify(css),
           map: { mappings: '' }
         }
       }
@@ -38,44 +75,12 @@ export default function css (options = {}) {
       }
 
       // Combine all stylesheets
-      let css = ''
+      let scss = ''
       for (const id in styles) {
-        css += styles[id] || ''
+        scss += styles[id] || ''
       }
 
-      // Compile SASS to CSS
-      if (css.length) {
-        includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
-        try {
-          css = require('node-sass').renderSync(Object.assign({
-            data: css,
-            includePaths
-          }, options)).css.toString()
-        } catch (e) {
-          if (options.failOnError) {
-            throw e
-          }
-          console.log()
-          console.log(red('Error:\n\t' + e.message))
-          if (e.message.includes('Invalid CSS')) {
-            console.log(green('Solution:\n\t' + 'fix your Sass code'))
-            console.log('Line:   ' + e.line)
-            console.log('Column: ' + e.column)
-          }
-          if (e.message.includes('node-sass') && e.message.includes('find module')) {
-            console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
-          }
-          if (e.message.includes('node-sass') && e.message.includes('bindigs')) {
-            console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
-          }
-          console.log()
-        }
-      }
-
-      // Possibly process CSS (e.g. by PostCSS)
-      if (typeof options.processor === 'function') {
-        css = options.processor(css, styles)
-      }
+      const css = compileToCSS(scss)
 
       // Resolve if porcessor returned a Promise
       Promise.resolve(css).then(css => {
