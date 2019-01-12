@@ -20,7 +20,11 @@
 
 ## Installation
 ```
+# Rollup v0.60+ and v1+
 npm install --save-dev rollup-plugin-scss
+
+# Rollup v0.59 and below
+npm install --save-dev rollup-plugin-scss@0
 ```
 
 ## Usage

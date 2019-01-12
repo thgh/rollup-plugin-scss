@@ -9,11 +9,11 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "lint": "standard rollup.config.js index.es.js",
-    "prepublish": "npm run build"
+    "test": "cd test && rm output.* && rollup -c && cmp -s output.js expected.js && cmp -s output.css expected.css && cd ..",
+    "prepare": "rollup -c"
   },
   "keywords": [
     "rollup-plugin",
-    "vue2",
     "css",
     "sass",
     "scss"
@@ -33,11 +33,12 @@
     "index.es.js"
   ],
   "dependencies": {
-    "node-sass": "^4.5.3",
-    "rollup-pluginutils": "^2.0.1"
+    "node-sass": "4",
+    "rollup-pluginutils": "2"
   },
   "devDependencies": {
-    "rollup": "^0.52.0",
-    "rollup-plugin-buble": "0"
+    "rollup": "1",
+    "rollup-plugin-buble": "0",
+    "standard": "^12.0.1"
   }
 }

@@ -68,7 +68,7 @@ export default function css (options = {}) {
 
       return ''
     },
-    ongenerate (opts) {
+    generateBundle (opts) {
       // No stylesheet needed
       if (options.output === false) {
         return
@@ -97,7 +97,7 @@ export default function css (options = {}) {
           }
 
           // Guess destination filename
-          dest = opts.dest || 'bundle.js'
+          dest = opts.dest || opts.file || 'bundle.js'
           if (dest.endsWith('.js')) {
             dest = dest.slice(0, -3)
           }
