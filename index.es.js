@@ -3,7 +3,7 @@ import { dirname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 
 export default function css (options = {}) {
-  const filter = createFilter(options.include || ['**/*.css', '**/*.scss', '**/*.sass'], options.exclude)
+  const filter = createFilter(options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'], options.exclude)
   let dest = options.output
 
   const styles = {}
