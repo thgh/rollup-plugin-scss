@@ -2,7 +2,7 @@ import { existsSync, mkdirSync, writeFile } from 'fs'
 import { dirname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 
-export default function css (options = {}) {
+export default function scss (options = {}) {
   const filter = createFilter(options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'], options.exclude)
   let dest = options.output
 
@@ -17,6 +17,9 @@ export default function css (options = {}) {
       try {
         const css = require('node-sass').renderSync(Object.assign({
           data: scss,
+          sourceMap: options.sourceMap || (dest + '.map'),
+          sourceMapEmbed: options.sourceMap !== false,
+          outFile: dest,
           includePaths
         }, options)).css.toString()
         // Possibly process CSS (e.g. by PostCSS)
@@ -74,13 +77,22 @@ export default function css (options = {}) {
         return
       }
 
+      // Guess destination filename
+      if (typeof dest !== 'string') {
+        dest = opts.dest || opts.file || 'bundle.js'
+        if (dest.endsWith('.js')) {
+          dest = dest.slice(0, -3)
+        }
+        dest = dest + '.css'
+      }
+
       // Combine all stylesheets
       let scss = ''
       for (const id in styles) {
         scss += styles[id] || ''
       }
 
-      const css = compileToCSS(scss)
+      const css = compileToCSS(scss, dest)
 
       // Resolve if porcessor returned a Promise
       Promise.resolve(css).then(css => {
@@ -95,13 +107,6 @@ export default function css (options = {}) {
           if (!css.length) {
             return
           }
-
-          // Guess destination filename
-          dest = opts.dest || opts.file || 'bundle.js'
-          if (dest.endsWith('.js')) {
-            dest = dest.slice(0, -3)
-          }
-          dest = dest + '.css'
         }
 
         // Ensure that dest parent folders exist (create the missing ones)
