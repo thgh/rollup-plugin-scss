@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-scss",
-  "version": "0.4.0",
+  "version": "1.0.0",
   "description": "Rollup multiple .scss, .sass and .css imports",
   "main": "index.cjs.js",
   "module": "index.es.js",
@@ -9,7 +9,7 @@
     "build": "rollup -c",
     "dev": "rollup -cw",
     "lint": "standard rollup.config.js index.es.js",
-    "test": "cd test && rm output.* && rollup -c && cmp -s output.js expected.js && cmp -s output.css expected.css && cd ..",
+    "test": "cd test && rm -f output.* && rollup -c && cmp output.js expected.js && cmp output.css expected.css && cd ..",
     "prepare": "rollup -c"
   },
   "keywords": [
