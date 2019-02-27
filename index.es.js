@@ -112,7 +112,7 @@ export default function css (options = {}) {
           if (opts.verbose !== false) {
             if (err) {
               console.error(red(err))
-            } else {
+            } else if (css) {
               console.log(green(dest), getSize(css.length))
             }
           }
