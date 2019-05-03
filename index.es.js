@@ -66,6 +66,22 @@ export default function css (options = {}) {
       styles[id] = code
       includePaths.push(dirname(id))
 
+      if (options.link) {
+        if (typeof options.output !== 'string') {
+          throw new Error('Set `output` to the path of the output css.')
+        }
+        return {
+          code: `if (typeof document !== 'undefined') {
+  const link = document.createElement('link');
+  link.rel = 'stylesheet';
+  link.href = ${JSON.stringify(options.output)};
+  document.head.appendChild(link);
+}
+export default {}`,
+          map: { mappings: '' }
+        }
+      }
+
       return ''
     },
     generateBundle (opts) {

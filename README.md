@@ -70,6 +70,9 @@ scss({
   // Disable any style output or callbacks, import as string
   output: false,
 
+  // Load the output css file with a link tag (default: false)
+  link: true,
+
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
 })
