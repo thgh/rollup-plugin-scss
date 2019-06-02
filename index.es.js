@@ -15,10 +15,11 @@ export default function css (options = {}) {
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const css = require('node-sass').renderSync(Object.assign({
-          data: scss,
+        const cssOptions = Object.assign({
           includePaths
-        }, options)).css.toString()
+        }, options);
+        cssOptions.data = options.data ? options.data + scss : scss;
+        const css = require('node-sass').renderSync(cssOptions).css.toString()
         // Possibly process CSS (e.g. by PostCSS)
         if (typeof options.processor === 'function') {
           return options.processor(css, styles)
