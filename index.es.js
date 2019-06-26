@@ -18,7 +18,7 @@ export default function css (options = {}) {
         const cssOptions = Object.assign({
           includePaths
         }, options);
-        cssOptions.data = options.data ? options.data + scss : scss;
+        cssOptions.data = options.prefix ? options.prefix + scss : scss;
         const css = require('node-sass').renderSync(cssOptions).css.toString()
         // Possibly process CSS (e.g. by PostCSS)
         if (typeof options.processor === 'function') {

@@ -72,6 +72,9 @@ scss({
 
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
+
+  // Prefix global scss. Useful for variables and mixins.
+  prefix: `@import "./fonts.scss";`
 })
 ```
 
