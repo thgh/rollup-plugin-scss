@@ -72,6 +72,11 @@ scss({
 
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
+
+  // Add a directory to watch changes in.
+  // Do not choose a directory where rollup output or dest is pointed to
+  // as this will cause an infinite loop
+  watchDir: './path/to/styles/directory',
 })
 ```
 
