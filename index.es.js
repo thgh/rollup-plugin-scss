@@ -7,6 +7,7 @@ export default function css (options = {}) {
   let dest = options.output
 
   const styles = {}
+  const prefix = options.prefix ? options.prefix + '\n' : ''
   let includePaths = options.includePaths || ['node_modules/']
   includePaths.push(process.cwd())
 
@@ -15,11 +16,10 @@ export default function css (options = {}) {
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const cssOptions = Object.assign({
+        const css = require('node-sass').renderSync(Object.assign({
+          data: prefix + scss,
           includePaths
-        }, options);
-        cssOptions.data = options.prefix ? options.prefix + scss : scss;
-        const css = require('node-sass').renderSync(cssOptions).css.toString()
+        }, options)).css.toString()
         // Possibly process CSS (e.g. by PostCSS)
         if (typeof options.processor === 'function') {
           return options.processor(css, styles)
