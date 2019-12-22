@@ -7,7 +7,7 @@ export default function css (options = {}) {
   let dest = options.output
 
   const styles = {}
-  let includePaths = options.includePaths || []
+  let includePaths = options.includePaths || ['node_modules/']
   includePaths.push(process.cwd())
 
   const compileToCSS = function (scss) {
