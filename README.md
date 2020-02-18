@@ -48,7 +48,7 @@ import './reset.css'
 
 ### Options
 
-Options are passed to [node-sass].
+Options are passed to the sass compiler ([node-sass] by defaut).
 By default the plugin will base the filename for the css on the bundle destination.
 
 ```js
@@ -74,7 +74,10 @@ scss({
   failOnError: true,
 
   // Prefix global scss. Useful for variables and mixins.
-  prefix: `@import "./fonts.scss";`
+  prefix: `@import "./fonts.scss";`,
+
+  // use a node-sass compatible compiler (like 'sass') instead
+  runtime: require('sass')
 })
 ```
 
