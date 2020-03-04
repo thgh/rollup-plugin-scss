@@ -1,8 +1,8 @@
-import scss from '../index.es.js'
+import scss from '../../index.es.js'
 import sass from 'sass'
 
 export default {
-  input: 'input.js',
+  input: '../input.js',
   output: {
     file: 'output.js',
     format: 'esm'
