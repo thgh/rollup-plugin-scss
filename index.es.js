@@ -67,7 +67,15 @@ export default function css (options = {}) {
       styles[id] = code
       includePaths.push(dirname(id))
 
+      // In the case of watching path, watch all files there 
+      if ('watchDir' in options) {
+          this.addWatchFile(options.watchDir);
+      }
+
       return ''
+    },
+    watchChange(id) {
+        console.log('Change found in: ', id);
     },
     generateBundle (opts) {
       // No stylesheet needed
