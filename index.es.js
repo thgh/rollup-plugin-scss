@@ -39,7 +39,7 @@ export default function css (options = {}) {
         if (e.message.includes('node-sass') && e.message.includes('find module')) {
           console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
         }
-        if (e.message.includes('node-sass') && e.message.includes('bindigs')) {
+        if (e.message.includes('node-sass') && e.message.includes('bindings')) {
           console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
         }
         console.log()
