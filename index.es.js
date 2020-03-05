@@ -7,7 +7,8 @@ export default function css (options = {}) {
   let dest = options.output
 
   const styles = {}
-  let includePaths = options.includePaths || []
+  const prefix = options.prefix ? options.prefix + '\n' : ''
+  let includePaths = options.includePaths || ['node_modules/']
   includePaths.push(process.cwd())
 
   const compileToCSS = function (scss) {
@@ -16,7 +17,7 @@ export default function css (options = {}) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
         const css = require('node-sass').renderSync(Object.assign({
-          data: scss,
+          data: prefix + scss,
           includePaths
         }, options)).css.toString()
         // Possibly process CSS (e.g. by PostCSS)
@@ -98,6 +99,10 @@ export default function css (options = {}) {
           return
         }
 
+        if (typeof css !== 'string') {
+          return
+        }
+
         if (typeof dest !== 'string') {
           // Don't create unwanted empty stylesheets
           if (!css.length) {
@@ -142,8 +147,8 @@ function getSize (bytes) {
   return bytes < 10000
     ? bytes.toFixed(0) + ' B'
     : bytes < 1024000
-    ? (bytes / 1024).toPrecision(3) + ' kB'
-    : (bytes / 1024 / 1024).toPrecision(4) + ' MB'
+      ? (bytes / 1024).toPrecision(3) + ' kB'
+      : (bytes / 1024 / 1024).toPrecision(4) + ' MB'
 }
 
 function ensureParentDirsSync (dir) {

@@ -4,9 +4,10 @@ export default {
   input: 'index.es.js',
   output: {
     file: 'index.cjs.js',
-    format: 'cjs',
+    format: 'cjs'
   },
   plugins: [
     buble()
-  ]
+  ],
+  external: ['fs', 'path', 'rollup-pluginutils']
 }
