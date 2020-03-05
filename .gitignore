@@ -12,5 +12,5 @@ node_modules
 
 # Build files
 index.cjs.js
-/test/dest.js
-/test/dest.css
+/test/output.js
+/test/output.css

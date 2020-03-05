@@ -33,17 +33,20 @@ npm install --save-dev rollup-plugin-scss@0
 import scss from 'rollup-plugin-scss'
 
 export default {
-  entry: 'entry.js',
-  dest: 'bundle.js',
+  input: 'input.js',
+  output: {
+    file: 'output.js',
+    format: 'esm'
+  },
   plugins: [
-    scss() // will output compiled styles to bundle.css
+    scss() // will output compiled styles to output.css
   ]
 }
 ```
 
 ```js
 // entry.js
-import './reset.css'
+import './reset.scss'
 ```
 
 ### Options
@@ -69,7 +72,7 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
-  
+
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
 
@@ -78,7 +81,7 @@ scss({
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
-  watch: 'src/scss/components',
+  watch: 'src/styles/components',
 })
 ```
 

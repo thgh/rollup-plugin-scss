@@ -48,10 +48,17 @@ export default function css (options = {}) {
   }
 
   return {
-    name: 'css',
+    name: 'scss',
     transform (code, id) {
       if (!filter(id)) {
         return
+      }
+
+      // Rebuild all scss files if anything happens to this folder
+      // TODO: check if it's possible to get a list of all dependent scss files
+      //       and only watch those
+      if ('watch' in options) {
+        this.addWatchFile(options.watch)
       }
 
       // When output is disabled, the stylesheet is exported as a string
@@ -67,15 +74,7 @@ export default function css (options = {}) {
       styles[id] = code
       includePaths.push(dirname(id))
 
-      // In the case of watching path, watch all files there 
-      if ('watchDir' in options) {
-          this.addWatchFile(options.watchDir);
-      }
-
       return ''
-    },
-    watchChange(id) {
-        console.log('Change found in: ', id);
     },
     generateBundle (opts) {
       // No stylesheet needed
