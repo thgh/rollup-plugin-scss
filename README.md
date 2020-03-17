@@ -19,12 +19,15 @@
 </a>
 
 ## Installation
+
+The sass compiler is now a peer dependency of the plugin, so it must be installed explicitly.
+
 ```
 # Rollup v0.60+ and v1+
-npm install --save-dev rollup-plugin-scss
+npm install --save-dev rollup-plugin-scss node-sass
 
 # Rollup v0.59 and below
-npm install --save-dev rollup-plugin-scss@0
+npm install --save-dev rollup-plugin-scss@0 node-sass
 ```
 
 ## Usage
