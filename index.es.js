@@ -5,7 +5,7 @@ import { createFilter } from 'rollup-pluginutils'
 export default function css (options = {}) {
   const filter = createFilter(options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'], options.exclude)
   let dest = options.output
-  const runtime = options.runtime || require('node-sass')
+  const compiler = options.compiler || require('node-sass')
 
   const styles = {}
   const prefix = options.prefix ? options.prefix + '\n' : ''
@@ -17,7 +17,7 @@ export default function css (options = {}) {
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const css = runtime.renderSync(Object.assign({
+        const css = compiler.renderSync(Object.assign({
           data: prefix + scss,
           includePaths
         }, options)).css.toString()
