@@ -53,7 +53,7 @@ By default the plugin will base the filename for the css on the bundle destinati
 
 ```js
 scss({
-  //Choose *one* of these possible "output:..." options
+  // Choose *one* of these possible "output:..." options
   // Default behaviour is to write all styles to the bundle destination where .js is replaced by .css
   output: true,
 
@@ -69,7 +69,7 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
-
+  
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
 
@@ -77,7 +77,11 @@ scss({
   prefix: `@import "./fonts.scss";`,
 
   // use a node-sass compatible compiler (like 'sass') instead
-  runtime: require('sass')
+  runtime: require('sass'),
+
+  // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
+  // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
+  watch: 'src/scss/components',
 })
 ```
 
