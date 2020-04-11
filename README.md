@@ -82,6 +82,7 @@ scss({
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',
+  watch: ['src/styles/components', 'src/multiple/folders'],
 })
 ```
 

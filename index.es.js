@@ -58,7 +58,8 @@ export default function css (options = {}) {
       // TODO: check if it's possible to get a list of all dependent scss files
       //       and only watch those
       if ('watch' in options) {
-        this.addWatchFile(options.watch)
+        const files = Array.isArray(options.watch) ? options.watch : [options.watch]
+        files.forEach(file => this.addWatchFile(file)) 
       }
 
       // When output is disabled, the stylesheet is exported as a string
