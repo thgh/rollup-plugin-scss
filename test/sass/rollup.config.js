@@ -8,8 +8,6 @@ export default {
     format: 'esm'
   },
   plugins: [
-    scss({
-      runtime: sass
-    })
+    scss({ sass })
   ]
 }

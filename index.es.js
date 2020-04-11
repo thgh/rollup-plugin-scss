@@ -5,7 +5,6 @@ import { createFilter } from 'rollup-pluginutils'
 export default function css (options = {}) {
   const filter = createFilter(options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'], options.exclude)
   let dest = options.output
-  const compiler = options.compiler || require('node-sass')
 
   const styles = {}
   const prefix = options.prefix ? options.prefix + '\n' : ''
@@ -17,7 +16,8 @@ export default function css (options = {}) {
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const css = compiler.renderSync(Object.assign({
+        const sass = options.sass || require('node-sass')
+        const css = sass.renderSync(Object.assign({
           data: prefix + scss,
           includePaths
         }, options)).css.toString()
@@ -40,7 +40,7 @@ export default function css (options = {}) {
         if (e.message.includes('node-sass') && e.message.includes('find module')) {
           console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
         }
-        if (e.message.includes('node-sass') && e.message.includes('bindigs')) {
+        if (e.message.includes('node-sass') && e.message.includes('bindings')) {
           console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
         }
         console.log()
@@ -49,10 +49,18 @@ export default function css (options = {}) {
   }
 
   return {
-    name: 'css',
+    name: 'scss',
     transform (code, id) {
       if (!filter(id)) {
         return
+      }
+
+      // Rebuild all scss files if anything happens to this folder
+      // TODO: check if it's possible to get a list of all dependent scss files
+      //       and only watch those
+      if ('watch' in options) {
+        const files = Array.isArray(options.watch) ? options.watch : [options.watch]
+        files.forEach(file => this.addWatchFile(file)) 
       }
 
       // When output is disabled, the stylesheet is exported as a string
@@ -68,15 +76,7 @@ export default function css (options = {}) {
       styles[id] = code
       includePaths.push(dirname(id))
 
-      // In the case of watching path, watch all files there 
-      if ('watchDir' in options) {
-          this.addWatchFile(options.watchDir);
-      }
-
       return ''
-    },
-    watchChange(id) {
-        console.log('Change found in: ', id);
     },
     generateBundle (opts) {
       // No stylesheet needed

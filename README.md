@@ -19,15 +19,12 @@
 </a>
 
 ## Installation
-
-The sass compiler is now a peer dependency of the plugin, so it must be installed explicitly.
-
 ```
 # Rollup v0.60+ and v1+
-npm install --save-dev rollup-plugin-scss node-sass
+npm install --save-dev rollup-plugin-scss
 
 # Rollup v0.59 and below
-npm install --save-dev rollup-plugin-scss@0 node-sass
+npm install --save-dev rollup-plugin-scss@0
 ```
 
 ## Usage
@@ -36,17 +33,20 @@ npm install --save-dev rollup-plugin-scss@0 node-sass
 import scss from 'rollup-plugin-scss'
 
 export default {
-  entry: 'entry.js',
-  dest: 'bundle.js',
+  input: 'input.js',
+  output: {
+    file: 'output.js',
+    format: 'esm'
+  },
   plugins: [
-    scss() // will output compiled styles to bundle.css
+    scss() // will output compiled styles to output.css
   ]
 }
 ```
 
 ```js
 // entry.js
-import './reset.css'
+import './reset.scss'
 ```
 
 ### Options
@@ -72,19 +72,20 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
-  
+
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
 
   // Prefix global scss. Useful for variables and mixins.
   prefix: `@import "./fonts.scss";`,
 
-  // use a node-sass compatible compiler (default: node-sass)
-  compiler: require('sass'),
+  // Use a node-sass compatible compiler (default: node-sass)
+  sass: require('sass'),
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
-  watch: 'src/scss/components',
+  watch: 'src/styles/components',
+  watch: ['src/styles/components', 'src/multiple/folders'],
 })
 ```
 
