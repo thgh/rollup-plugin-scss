@@ -4,6 +4,10 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
 
+## [2.2.0] - 2020-04-11
+### Added
+- Add `watch` option @JimSchofield
+
 ## [2.1.0] - 2019-12-22
 ### Added
 - Add `prefix` option @jackprosser
@@ -18,7 +22,8 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 ### Update
 - Update `ongenerate` to `generateBundle`
 
-[Unreleased]: https://github.com/thgh/rollup-plugin-scss/compare/v2.1.0...HEAD
+[Unreleased]: https://github.com/thgh/rollup-plugin-scss/compare/v2.2.0...HEAD
+[2.2.0]: https://github.com/thgh/rollup-plugin-scss/compare/v2.1.0...v2.2.0
 [2.1.0]: https://github.com/thgh/rollup-plugin-scss/compare/v2.0.0...v2.1.0
 [2.0.0]: https://github.com/thgh/rollup-plugin-scss/compare/v1.0.0...v2.0.0
 [1.0.0]: https://github.com/thgh/rollup-plugin-scss/compare/v0.0.1...v1.0.0

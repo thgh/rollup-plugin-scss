@@ -1,6 +1,6 @@
 {
   "name": "rollup-plugin-scss",
-  "version": "2.1.0",
+  "version": "2.2.0",
   "description": "Rollup multiple .scss, .sass and .css imports",
   "main": "index.cjs.js",
   "module": "index.es.js",
