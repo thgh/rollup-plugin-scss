@@ -4,6 +4,10 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
 
+## [2.4.0] - 2020-04-13
+### Added
+- Add `sass` option @riri
+
 ## [2.2.0] - 2020-04-11
 ### Added
 - Add `watch` option @JimSchofield
