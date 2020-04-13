@@ -12,5 +12,4 @@ node_modules
 
 # Build files
 index.cjs.js
-/test/output.js
-/test/output.css
+/test/**/output.*

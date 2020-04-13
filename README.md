@@ -51,7 +51,7 @@ import './reset.scss'
 
 ### Options
 
-Options are passed to [node-sass].
+Options are passed to the sass compiler ([node-sass] by defaut).
 By default the plugin will base the filename for the css on the bundle destination.
 
 ```js
@@ -78,6 +78,9 @@ scss({
 
   // Prefix global scss. Useful for variables and mixins.
   prefix: `@import "./fonts.scss";`,
+
+  // Use a node-sass compatible compiler (default: node-sass)
+  sass: require('sass'),
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
@@ -113,3 +116,4 @@ The MIT License (MIT). Please see [License File](LICENSE) for more information.
 [rollup-plugin-buble]: https://www.npmjs.com/package/rollup-plugin-buble
 [rollup-plugin-babel]: https://www.npmjs.com/package/rollup-plugin-babel
 [node-sass]: https://www.npmjs.com/package/node-sass
+[sass]: https://www.npmjs.com/package/sass

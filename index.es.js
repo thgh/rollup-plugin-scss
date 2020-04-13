@@ -16,7 +16,8 @@ export default function css (options = {}) {
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const css = require('node-sass').renderSync(Object.assign({
+        const sass = options.sass || require('node-sass')
+        const css = sass.renderSync(Object.assign({
           data: prefix + scss,
           includePaths
         }, options)).css.toString()

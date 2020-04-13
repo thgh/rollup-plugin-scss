@@ -10,8 +10,10 @@
     "dev": "rollup -cw",
     "lint": "standard rollup.config.js index.es.js",
     "fix": "standard --fix rollup.config.js index.es.js",
-    "test": "cd test && rm -f output.* && rollup -c && cmp output.js expected.js && cmp output.css expected.css && cd ..",
-    "testw": "cd test && rm -f output.* && rollup -cw; cd ..",
+    "test:node-sass": "cd test/node-sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
+    "test:sass": "cd test/sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
+    "test": "npm run test:node-sass && npm run test:sass",
+    "testw": "cd test/node-sass && rm -f output.* && rollup -cw; cd ..",
     "prepare": "rollup -c"
   },
   "keywords": [
@@ -41,6 +43,7 @@
   "devDependencies": {
     "rollup": "2",
     "rollup-plugin-buble": "0",
+    "sass": "^1.26.3",
     "standard": "14"
   }
 }
