@@ -55,6 +55,9 @@ export default function css (options = {}) {
         return
       }
 
+      // Add the include path before doing any processing
+      includePaths.push(dirname(id))
+
       // Rebuild all scss files if anything happens to this folder
       // TODO: check if it's possible to get a list of all dependent scss files
       //       and only watch those
@@ -74,7 +77,6 @@ export default function css (options = {}) {
 
       // Map of every stylesheet
       styles[id] = code
-      includePaths.push(dirname(id))
 
       return ''
     },
