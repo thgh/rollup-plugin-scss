@@ -4,6 +4,10 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
 
+## [2.5.0] - 2020-05-07
+### Updated
+- Fix includePaths before processing @mach25
+
 ## [2.4.0] - 2020-04-13
 ### Added
 - Add `sass` option @riri
