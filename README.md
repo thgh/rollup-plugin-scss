@@ -80,6 +80,12 @@ scss({
   // Use a node-sass compatible compiler (default: node-sass)
   sass: require('sass'),
 
+  // Process resulting CSS, e.g. postcss + autoprefixer
+  processor: css => {
+    return Promise.resolve(postcss([autoprefixer]).process(css))
+      .then(result => result.css)
+  }
+
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',
