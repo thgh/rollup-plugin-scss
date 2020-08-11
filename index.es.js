@@ -68,11 +68,10 @@ export default function css (options = {}) {
 
       // When output is disabled, the stylesheet is exported as a string
       if (options.output === false) {
-        const css = compileToCSS(code)
-        return {
+        return Promise.resolve(compileToCSS(code)).then(css => ({
           code: 'export default ' + JSON.stringify(css),
           map: { mappings: '' }
-        }
+        }))
       }
 
       // Map of every stylesheet
@@ -94,7 +93,7 @@ export default function css (options = {}) {
 
       const css = compileToCSS(scss)
 
-      // Resolve if porcessor returned a Promise
+      // Resolve if processor returned a Promise
       Promise.resolve(css).then(css => {
         // Emit styles through callback
         if (typeof options.output === 'function') {

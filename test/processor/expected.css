@@ -1,0 +1,4 @@
+.rollup .plugin .scss {
+  color: green;
+  -ms-user-select: none;
+      user-select: none; }
