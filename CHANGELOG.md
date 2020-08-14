@@ -4,6 +4,13 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
 
+## [2.6.0] - 2020-08-14
+### Fixed
+- Resolve processor as a promise during transform step @geotrev
+
+### Added
+- Add support for postcss processor
+
 ## [2.5.0] - 2020-05-07
 ### Updated
 - Fix includePaths before processing @mach25

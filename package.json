@@ -12,8 +12,9 @@
     "fix": "standard --fix rollup.config.js index.es.js",
     "test:node-sass": "cd test/node-sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:sass": "cd test/sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
+    "test:postcss": "cd test/postcss && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:processor": "cd test/processor && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
-    "test": "npm run test:node-sass && npm run test:sass && npm run test:processor",
+    "test": "npm run test:node-sass && npm run test:sass && npm run test:processor && npm run test:postcss",
     "testw": "cd test/node-sass && rm -f output.* && rollup -cw; cd ..",
     "prepare": "rollup -c"
   },

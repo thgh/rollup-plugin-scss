@@ -23,7 +23,15 @@ export default function css (options = {}) {
         }, options)).css.toString()
         // Possibly process CSS (e.g. by PostCSS)
         if (typeof options.processor === 'function') {
-          return options.processor(css, styles)
+          const processor = options.processor(css, styles)
+
+          // PostCSS support
+          if (typeof processor.process === 'function') {
+            return Promise.resolve(processor.process(css, { from: undefined }))
+              .then(result => result.css)
+          }
+
+          return processor
         }
         return css
       } catch (e) {
@@ -63,7 +71,7 @@ export default function css (options = {}) {
       //       and only watch those
       if ('watch' in options) {
         const files = Array.isArray(options.watch) ? options.watch : [options.watch]
-        files.forEach(file => this.addWatchFile(file)) 
+        files.forEach(file => this.addWatchFile(file))
       }
 
       // When output is disabled, the stylesheet is exported as a string
