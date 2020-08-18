@@ -49,7 +49,8 @@ import './reset.scss'
 
 ### Options
 
-Options are passed to the sass compiler ([node-sass] by defaut).
+Options are passed to the sass compiler ([node-sass] by default). Refer to [ the Sass docs](https://sass-lang.com/documentation/js-api#options) for more details on these options. <br/>
+One notable option is `indentedSyntax` which you'll need if you're parsing Sass syntax instead of Scss syntax. (e.g. when extracting a Vue `<style lang="sass">` tag) <br/>
 By default the plugin will base the filename for the css on the bundle destination.
 
 ```js
