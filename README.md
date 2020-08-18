@@ -88,10 +88,10 @@ scss({
   sass: require('sass'),
 
   // Run postcss processor before output
-  processor: css => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })])
+  processor: css => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })]),
 
   // Process resulting CSS
-  processor: css => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */')
+  processor: css => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
