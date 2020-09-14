@@ -49,7 +49,8 @@ import './reset.scss'
 
 ### Options
 
-Options are passed to the sass compiler ([node-sass] by defaut).
+Options are passed to the sass compiler ([node-sass] by default). Refer to [ the Sass docs](https://sass-lang.com/documentation/js-api#options) for more details on these options. <br/>
+One notable option is `indentedSyntax` which you'll need if you're parsing Sass syntax instead of Scss syntax. (e.g. when extracting a Vue `<style lang="sass">` tag) <br/>
 By default the plugin will base the filename for the css on the bundle destination.
 
 ```js
@@ -70,6 +71,12 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
+  
+  // Choose files to include in processing (default: ['/**/*.css', '/**/*.scss', '/**/*.sass'])
+  include: [],
+  
+  // Choose files to exclude from processing, (default: undefined) 
+  exclude: [],
 
   // Determine if node process should be terminated on error (default: false)
   failOnError: true,
@@ -81,10 +88,10 @@ scss({
   sass: require('sass'),
 
   // Run postcss processor before output
-  processor: css => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })])
+  processor: css => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })]),
 
   // Process resulting CSS
-  processor: css => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */')
+  processor: css => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
