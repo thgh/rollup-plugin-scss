@@ -39,7 +39,6 @@
     "index.es.js"
   ],
   "dependencies": {
-    "node-sass": "4",
     "rollup-pluginutils": "2"
   },
   "devDependencies": {
@@ -49,5 +48,8 @@
     "rollup-plugin-buble": "0",
     "sass": "^1.26.3",
     "standard": "14"
+  },
+  "optionalDependencies": {
+    "node-sass": "4"
   }
 }
