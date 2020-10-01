@@ -4,6 +4,10 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
 
+## [2.6.1] - 2020-10-01
+### Updated
+- Move node-sass to optionalDependencies @weizhenye
+
 ## [2.6.0] - 2020-08-14
 ### Fixed
 - Resolve processor as a promise during transform step @geotrev
