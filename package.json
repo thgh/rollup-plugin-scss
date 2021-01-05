@@ -41,6 +41,10 @@
   "dependencies": {
     "rollup-pluginutils": "2"
   },
+  "peerDependencies": {
+    "sass": ">=1.0.0",
+    "node-sass": ">=4.0.0"
+  },
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.32",
@@ -48,8 +52,5 @@
     "rollup-plugin-buble": "0",
     "sass": "^1.26.3",
     "standard": "14"
-  },
-  "optionalDependencies": {
-    "node-sass": "4"
   }
 }
