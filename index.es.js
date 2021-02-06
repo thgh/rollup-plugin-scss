@@ -25,7 +25,7 @@ export default function css (options = {}) {
         }, options))
 
         const css = render.css.toString()
-        const map = render.map ? render.map.toString() : null;
+        const map = render.map ? render.map.toString() : null
 
         // Possibly process CSS (e.g. by PostCSS)
         if (typeof options.processor === 'function') {
@@ -33,8 +33,8 @@ export default function css (options = {}) {
 
           // PostCSS support
           if (typeof processor.process === 'function') {
-            return Promise.resolve(processor.process(css, { from: undefined }))
-              .then(result => result.css)
+            return Promise.resolve(processor.process(css, { from: undefined, to: dest, map: { prev: map, inline: false } }))
+              .then(result => ({ css: result.css, map: result.map ? result.map.toString() : null }))
           }
 
           return processor
@@ -82,8 +82,8 @@ export default function css (options = {}) {
 
       // When output is disabled, the stylesheet is exported as a string
       if (options.output === false) {
-        return Promise.resolve(compileSass(code).css).then(css => ({
-          code: 'export default ' + JSON.stringify(css),
+        return Promise.resolve(compileSass(code)).then(compiled => ({
+          code: 'export default ' + JSON.stringify(compiled.css),
           map: { mappings: '' }
         }))
       }
@@ -118,13 +118,13 @@ export default function css (options = {}) {
 
       // Resolve if processor returned a Promise
       Promise.resolve(compiled).then(compiled => {
-        // Emit styles through callback
-        if (typeof options.output === 'function') {
-          options.output(compiled.css, styles)
+        if (typeof compiled !== 'object' || typeof compiled.css !== 'string') {
           return
         }
 
-        if (typeof compiled.css !== 'string') {
+        // Emit styles through callback
+        if (typeof options.output === 'function') {
+          options.output(compiled.css, styles)
           return
         }
 
@@ -150,9 +150,9 @@ export default function css (options = {}) {
         if (compiled.map) {
           writeFile(dest + '.map', compiled.map, (err) => {
             if (opts.verbose !== false && err) {
-              console.error(red(err));
+              console.error(red(err))
             }
-          });
+          })
         }
       })
     }
