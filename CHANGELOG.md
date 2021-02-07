@@ -3,6 +3,8 @@
 All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
+- Remove `node-sass` from optionalDependencies @astappiev <br/>
+  **You have to specify `node-sass` or `sass` in your project dependencies alongside `rollup-plugin-scss`**
 
 ## [2.6.1] - 2020-10-01
 ### Updated
