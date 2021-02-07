@@ -29,12 +29,15 @@ export default function css (options = {}) {
 
         // Possibly process CSS (e.g. by PostCSS)
         if (typeof options.processor === 'function') {
-          const processor = options.processor(css, styles)
+          const processor = options.processor(css, map, styles)
 
           // PostCSS support
           if (typeof processor.process === 'function') {
-            return Promise.resolve(processor.process(css, { from: undefined, to: dest, map: { prev: map, inline: false } }))
-              .then(result => ({ css: result.css, map: result.map ? result.map.toString() : null }))
+            return Promise.resolve(processor.process(css, {
+              from: undefined,
+              to: dest,
+              map: map ? { prev: map, inline: false } : null
+            }))
           }
 
           return processor
@@ -147,8 +150,13 @@ export default function css (options = {}) {
           }
         })
 
-        if (compiled.map) {
-          writeFile(dest + '.map', compiled.map, (err) => {
+        if (options.sourceMap && compiled.map) {
+          let sourcemap = compiled.map
+          if (typeof compiled.map.toString === 'function') {
+            sourcemap = compiled.map.toString()
+          }
+
+          writeFile(dest + '.map', sourcemap, (err) => {
             if (opts.verbose !== false && err) {
               console.error(red(err))
             }
