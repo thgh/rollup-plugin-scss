@@ -3,6 +3,8 @@
 All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
+- Add `sourceMap` option to enable generation of source map @astappiev
+- Because we have to proceed both css and map, a `processor` should return `{ css: string, map?: string }` instead of just `string`
 
 ## [2.6.1] - 2020-10-01
 ### Updated

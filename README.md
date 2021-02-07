@@ -71,11 +71,14 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
-  
+
+  // Enables/disables generation of source map (default: false) 
+  sourceMap: true,
+
   // Choose files to include in processing (default: ['/**/*.css', '/**/*.scss', '/**/*.sass'])
   include: [],
-  
-  // Choose files to exclude from processing, (default: undefined) 
+
+  // Choose files to exclude from processing (default: undefined) 
   exclude: [],
 
   // Determine if node process should be terminated on error (default: false)
