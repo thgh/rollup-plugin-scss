@@ -96,6 +96,9 @@ scss({
   // Process resulting CSS
   processor: (css, map) => ({ css: css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'), map }),
 
+  // or, just string (for backward compatiblity with v2 or simplicity)
+  processor: (css) => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
+
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',

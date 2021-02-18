@@ -40,7 +40,10 @@ export default function css (options = {}) {
             }))
           }
 
-          return processor
+          return Promise.resolve(processor).then(result => {
+            if (typeof result === 'string') return { css: result }
+            else return result
+          })
         }
         return { css, map }
       } catch (e) {
