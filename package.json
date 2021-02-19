@@ -12,10 +12,11 @@
     "fix": "prettier --write . ",
     "test:node-sass": "cd test/node-sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:sass": "cd test/sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
+    "test:insert": "cd test/insert && rm -f output.* && rollup -c && cmp output.js expected.js && cd ../..",
     "test:postcss": "cd test/postcss && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:processor": "cd test/processor && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:sourcemap": "cd test/sourcemap && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cmp output.css.map expected.css.map && cd ../..",
-    "test": "npm run test:node-sass && npm run test:sass && npm run test:processor && npm run test:postcss && npm run test:sourcemap",
+    "test": "npm run test:node-sass && npm run test:sass && npm run test:processor && npm run test:postcss && npm run test:sourcemap && npm run test:insert",
     "testw": "cd test/node-sass && rm -f output.* && rollup -cw; cd ..",
     "prepare": "rollup -c"
   },
