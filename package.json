@@ -43,15 +43,11 @@
     "rollup-pluginutils": "^2.3.3"
   },
   "devDependencies": {
-    "autoprefixer": "^10.2.4",
-    "node-sass": "^4.11.0",
-    "postcss": "^8.2.5",
-    "rollup": "^2.38.5",
-    "rollup-plugin-buble": "^0.19.8",
-    "sass": "^1.32.6",
-    "standard": "^16.0.3"
-  },
-  "optionalDependencies": {
-    "node-sass": "4"
+    "autoprefixer": "^9.8.6",
+    "postcss": "^7.0.32",
+    "rollup": "2",
+    "rollup-plugin-buble": "0",
+    "sass": "^1.26.3",
+    "standard": "14"
   }
 }

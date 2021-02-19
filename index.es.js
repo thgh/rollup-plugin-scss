@@ -34,12 +34,20 @@ export default function css (options = {}) {
   let includePaths = options.includePaths || ['node_modules/']
   includePaths.push(process.cwd())
 
-  const compileSass = function (scss) {
+  const loadSassLibrary = function () {
+    try {
+      return require('node-sass')
+    } catch (ignored) {
+      return require('sass')
+    }
+  }
+
+  const compileToCSS = function (scss) {
     // Compile SASS to CSS
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const sass = options.sass || require('node-sass')
+        const sass = options.sass || loadSassLibrary()
 
         const render = sass.renderSync(Object.assign({
           data: prefix + scss,
@@ -80,8 +88,8 @@ export default function css (options = {}) {
           console.log('Line:   ' + e.line)
           console.log('Column: ' + e.column)
         }
-        if (e.message.includes('node-sass') && e.message.includes('find module')) {
-          console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
+        if (e.message.includes('sass') && e.message.includes('find module')) {
+          console.log(green('Solution:\n\t' + 'npm install --save-dev sass' + '\n\tor\n\t' + 'npm install --save-dev node-sass'))
         }
         if (e.message.includes('node-sass') && e.message.includes('bindings')) {
           console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
@@ -123,7 +131,7 @@ export default function css (options = {}) {
         }))
       } else if (options.output === false) {
         // When output is disabled, the stylesheet is exported as a string
-        return Promise.resolve(compileSass(code)).then(compiled => ({
+        return Promise.resolve(compileToCSS(code)).then(compiled => ({
           code: 'export default ' + JSON.stringify(compiled.css),
           map: { mappings: '' }
         }))
@@ -155,7 +163,7 @@ export default function css (options = {}) {
         dest = dest + '.css'
       }
 
-      const compiled = compileSass(scss)
+      const compiled = compileToCSS(scss)
 
       // Resolve if processor returned a Promise
       Promise.resolve(compiled).then(compiled => {
