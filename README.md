@@ -112,7 +112,7 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 
 ## Contributing
 
-Contributions and feedback are very welcome.
+Contributions and feedback are very welcome. New features should include a test.
 
 To get it running:
   1. Clone the project.

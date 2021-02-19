@@ -2,9 +2,32 @@ import { existsSync, mkdirSync, writeFile } from 'fs'
 import { dirname } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 
+/*
+ * Create a style tag and append to head tag
+ *
+ * @param {String} css style
+ * @return {String} css style
+ */
+function insertStyleFn(css) {
+  if (!css) {
+    return
+  }
+  if (typeof window === "undefined") {
+    return
+  }
+
+  const style = document.createElement("style")
+
+  style.setAttribute("type", "text/css")
+  style.innerHTML = css
+  document.head.appendChild(style)
+  return css
+}
+
 export default function css (options = {}) {
   const filter = createFilter(options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'], options.exclude)
   let dest = options.output
+  const insertStyleFnName = "___$insertStylesToHeader"
 
   const styles = {}
   const prefix = options.prefix ? options.prefix + '\n' : ''
@@ -70,6 +93,11 @@ export default function css (options = {}) {
 
   return {
     name: 'scss',
+    intro() {
+      if (options.insert === true) {
+        return insertStyleFn.toString().replace(/insertStyleFn/, insertStyleFnName)
+      }
+    },
     transform (code, id) {
       if (!filter(id)) {
         return
@@ -85,9 +113,16 @@ export default function css (options = {}) {
         const files = Array.isArray(options.watch) ? options.watch : [options.watch]
         files.forEach(file => this.addWatchFile(file))
       }
-
-      // When output is disabled, the stylesheet is exported as a string
-      if (options.output === false) {
+      
+      if (options.insert === true) {
+        // When the 'insert' is enabled, the stylesheet will be inserted into <head/> tag.
+        return Promise.resolve(compileToCSS(code)).then((css) => ({
+          code:
+            "export default " + insertStyleFnName + "(" + JSON.stringify(css) + ")",
+          map: { mappings: "" },
+        }))
+      } else if (options.output === false) {
+        // When output is disabled, the stylesheet is exported as a string
         return Promise.resolve(compileSass(code)).then(compiled => ({
           code: 'export default ' + JSON.stringify(compiled.css),
           map: { mappings: '' }
@@ -101,7 +136,7 @@ export default function css (options = {}) {
     },
     generateBundle (opts) {
       // No stylesheet needed
-      if (options.output === false) {
+      if (options.output === false || options.insert === true) {
         return
       }
 
