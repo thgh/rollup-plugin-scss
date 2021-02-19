@@ -119,7 +119,37 @@ scss({
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',
   watch: ['src/styles/components', 'src/multiple/folders']
+
+  // Any other options are passed to the sass compiler
+  includePaths: ...
 })
+```
+
+## Examples
+
+Using postcss + autoprefixer + includePaths (sass option)
+
+```js
+import scss from 'rollup-plugin-scss'
+import postcss from 'postcss'
+import autoprefixer from 'autoprefixer'
+
+export default {
+  input: 'input.js',
+  output: {
+    file: 'output.js',
+    format: 'esm'
+  },
+  plugins: [
+    scss({
+      processor: () => postcss([autoprefixer()]),
+      includePaths: [
+        path.join(__dirname, '../../node_modules/'),
+        'node_modules/'
+      ]
+    })
+  ]
+}
 ```
 
 ## Changelog
