@@ -112,6 +112,9 @@ scss({
   processor: css =>
     css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
 
+  // Log filename and size of generated CSS files (default: true)
+  verbose: true
+
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',

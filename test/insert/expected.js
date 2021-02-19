@@ -14,6 +14,6 @@ function ___$insertStylesToHeader(css) {
   return css
 }
 
-___$insertStylesToHeader({"css":".rollup .plugin .scss {\n  color: green;\n  user-select: none; }\n","map":null});
+___$insertStylesToHeader(".rollup .plugin .scss {\n  color: green;\n  user-select: none; }\n");
 
 console.log('scss imported');
