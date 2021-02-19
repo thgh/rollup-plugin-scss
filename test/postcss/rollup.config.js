@@ -10,7 +10,8 @@ export default {
   },
   plugins: [
     scss({
-      processor: () => postcss([autoprefixer({ overrideBrowserslist: 'Edge 18' })])
+      processor: () =>
+        postcss([autoprefixer({ overrideBrowserslist: 'Edge 18' })])
     })
   ]
 }

@@ -11,11 +11,11 @@ export default {
   plugins: [
     scss({
       processor: css => {
-        return Promise
-          .resolve(
-            postcss([autoprefixer({ overrideBrowserslist: 'Edge 18' })])
-              .process(css, { from: undefined })
-          )
+        return Promise.resolve(
+          postcss([
+            autoprefixer({ overrideBrowserslist: 'Edge 18' })
+          ]).process(css, { from: undefined })
+        )
       }
     })
   ]

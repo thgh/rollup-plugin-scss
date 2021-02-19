@@ -7,8 +7,6 @@ export default {
     file: 'index.cjs.js',
     format: 'cjs'
   },
-  plugins: [
-    buble()
-  ],
+  plugins: [buble()],
   external: ['fs', 'path', 'rollup-pluginutils']
 }

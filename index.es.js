@@ -12,22 +12,25 @@ function insertStyleFn(css) {
   if (!css) {
     return
   }
-  if (typeof window === "undefined") {
+  if (typeof window === 'undefined') {
     return
   }
 
-  const style = document.createElement("style")
+  const style = document.createElement('style')
 
-  style.setAttribute("type", "text/css")
+  style.setAttribute('type', 'text/css')
   style.innerHTML = css
   document.head.appendChild(style)
   return css
 }
 
-export default function css (options = {}) {
-  const filter = createFilter(options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'], options.exclude)
+export default function css(options = {}) {
+  const filter = createFilter(
+    options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'],
+    options.exclude
+  )
   let dest = options.output
-  const insertStyleFnName = "___$insertStylesToHeader"
+  const insertStyleFnName = '___$insertStylesToHeader'
 
   const styles = {}
   const prefix = options.prefix ? options.prefix + '\n' : ''
@@ -49,11 +52,16 @@ export default function css (options = {}) {
       try {
         const sass = options.sass || loadSassLibrary()
 
-        const render = sass.renderSync(Object.assign({
-          data: prefix + scss,
-          outFile: dest,
-          includePaths
-        }, options))
+        const render = sass.renderSync(
+          Object.assign(
+            {
+              data: prefix + scss,
+              outFile: dest,
+              includePaths
+            },
+            options
+          )
+        )
 
         const css = render.css.toString()
         const map = render.map ? render.map.toString() : null
@@ -64,11 +72,13 @@ export default function css (options = {}) {
 
           // PostCSS support
           if (typeof processor.process === 'function') {
-            return Promise.resolve(processor.process(css, {
-              from: undefined,
-              to: dest,
-              map: map ? { prev: map, inline: false } : null
-            }))
+            return Promise.resolve(
+              processor.process(css, {
+                from: undefined,
+                to: dest,
+                map: map ? { prev: map, inline: false } : null
+              })
+            )
           }
 
           return Promise.resolve(processor).then(result => {
@@ -89,7 +99,14 @@ export default function css (options = {}) {
           console.log('Column: ' + e.column)
         }
         if (e.message.includes('sass') && e.message.includes('find module')) {
-          console.log(green('Solution:\n\t' + 'npm install --save-dev sass' + '\n\tor\n\t' + 'npm install --save-dev node-sass'))
+          console.log(
+            green(
+              'Solution:\n\t' +
+                'npm install --save-dev sass' +
+                '\n\tor\n\t' +
+                'npm install --save-dev node-sass'
+            )
+          )
         }
         if (e.message.includes('node-sass') && e.message.includes('bindings')) {
           console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
@@ -103,10 +120,12 @@ export default function css (options = {}) {
     name: 'scss',
     intro() {
       if (options.insert === true) {
-        return insertStyleFn.toString().replace(/insertStyleFn/, insertStyleFnName)
+        return insertStyleFn
+          .toString()
+          .replace(/insertStyleFn/, insertStyleFnName)
       }
     },
-    transform (code, id) {
+    transform(code, id) {
       if (!filter(id)) {
         return
       }
@@ -118,16 +137,22 @@ export default function css (options = {}) {
       // TODO: check if it's possible to get a list of all dependent scss files
       //       and only watch those
       if ('watch' in options) {
-        const files = Array.isArray(options.watch) ? options.watch : [options.watch]
+        const files = Array.isArray(options.watch)
+          ? options.watch
+          : [options.watch]
         files.forEach(file => this.addWatchFile(file))
       }
-      
+
       if (options.insert === true) {
         // When the 'insert' is enabled, the stylesheet will be inserted into <head/> tag.
-        return Promise.resolve(compileToCSS(code)).then((css) => ({
+        return Promise.resolve(compileToCSS(code)).then(css => ({
           code:
-            "export default " + insertStyleFnName + "(" + JSON.stringify(css) + ")",
-          map: { mappings: "" },
+            'export default ' +
+            insertStyleFnName +
+            '(' +
+            JSON.stringify(css) +
+            ')',
+          map: { mappings: '' }
         }))
       } else if (options.output === false) {
         // When output is disabled, the stylesheet is exported as a string
@@ -142,7 +167,7 @@ export default function css (options = {}) {
 
       return ''
     },
-    generateBundle (opts) {
+    generateBundle(opts) {
       // No stylesheet needed
       if (options.output === false || options.insert === true) {
         return
@@ -186,7 +211,7 @@ export default function css (options = {}) {
         ensureParentDirsSync(dirname(dest))
 
         // Emit styles to file
-        writeFile(dest, compiled.css, (err) => {
+        writeFile(dest, compiled.css, err => {
           if (opts.verbose !== false) {
             if (err) {
               console.error(red(err))
@@ -202,7 +227,7 @@ export default function css (options = {}) {
             sourcemap = compiled.map.toString()
           }
 
-          writeFile(dest + '.map', sourcemap, (err) => {
+          writeFile(dest + '.map', sourcemap, err => {
             if (opts.verbose !== false && err) {
               console.error(red(err))
             }
@@ -213,23 +238,23 @@ export default function css (options = {}) {
   }
 }
 
-function red (text) {
+function red(text) {
   return '\x1b[1m\x1b[31m' + text + '\x1b[0m'
 }
 
-function green (text) {
+function green(text) {
   return '\x1b[1m\x1b[32m' + text + '\x1b[0m'
 }
 
-function getSize (bytes) {
+function getSize(bytes) {
   return bytes < 10000
     ? bytes.toFixed(0) + ' B'
     : bytes < 1024000
-      ? (bytes / 1024).toPrecision(3) + ' kB'
-      : (bytes / 1024 / 1024).toPrecision(4) + ' MB'
+    ? (bytes / 1024).toPrecision(3) + ' kB'
+    : (bytes / 1024 / 1024).toPrecision(4) + ' MB'
 }
 
-function ensureParentDirsSync (dir) {
+function ensureParentDirsSync(dir) {
   if (existsSync(dir)) {
     return
   }

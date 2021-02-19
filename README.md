@@ -17,6 +17,7 @@
 </a>
 
 ## Installation
+
 ```
 # Rollup v0.60+ and v1+
 npm install --save-dev rollup-plugin-scss
@@ -26,6 +27,7 @@ npm install --save-dev rollup-plugin-scss@0
 ```
 
 Since v3, you have to install Sass compiler manually:
+
 ```
 # Node Sass (deprecated)
 npm install --save-dev node-sass
@@ -33,9 +35,11 @@ npm install --save-dev node-sass
 # Dart Sass
 npm install --save-dev sass
 ```
+
 If any of them is installed, it will be used automatically, if both installed `node-sass` will be used.
 
 ## Usage
+
 ```js
 // rollup.config.js
 import scss from 'rollup-plugin-scss'
@@ -82,13 +86,13 @@ scss({
   // Disable any style output or callbacks, import as string
   output: false,
 
-  // Enables/disables generation of source map (default: false) 
+  // Enables/disables generation of source map (default: false)
   sourceMap: true,
 
   // Choose files to include in processing (default: ['/**/*.css', '/**/*.scss', '/**/*.sass'])
   include: [],
 
-  // Choose files to exclude from processing (default: undefined) 
+  // Choose files to exclude from processing (default: undefined)
   exclude: [],
 
   // Determine if node process should be terminated on error (default: false)
@@ -103,18 +107,22 @@ scss({
   sass: require('sass'),
 
   // Run postcss processor before output
-  processor: () => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })]),
+  processor: () => postcss([autoprefixer({ overrideBrowserslist: 'Edge 18' })]),
 
   // Process resulting CSS
-  processor: (css, map) => ({ css: css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'), map }),
+  processor: (css, map) => ({
+    css: css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
+    map
+  }),
 
   // or, just string (for backward compatiblity with v2 or simplicity)
-  processor: (css) => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
+  processor: css =>
+    css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',
-  watch: ['src/styles/components', 'src/multiple/folders'],
+  watch: ['src/styles/components', 'src/multiple/folders']
 })
 ```
 
@@ -127,8 +135,9 @@ Please see [CHANGELOG](CHANGELOG.md) for more information what has changed recen
 Contributions and feedback are very welcome. New features should include a test.
 
 To get it running:
-  1. Clone the project.
-  2. `npm install`
+
+1. Clone the project.
+2. `npm install`
 
 ## Credits
 
