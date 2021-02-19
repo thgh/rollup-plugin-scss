@@ -3,6 +3,8 @@
 All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
+- Add `sourceMap` option to enable generation of source map @astappiev
+- A `processor` can receive map as second parameter and return `{ css: string, map?: string }`
 - Remove `node-sass` from optionalDependencies @astappiev <br/>
   **You have to specify `node-sass` or `sass` in your project dependencies alongside `rollup-plugin-scss`**
 

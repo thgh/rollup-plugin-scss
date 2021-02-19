@@ -81,11 +81,14 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
-  
+
+  // Enables/disables generation of source map (default: false) 
+  sourceMap: true,
+
   // Choose files to include in processing (default: ['/**/*.css', '/**/*.scss', '/**/*.sass'])
   include: [],
-  
-  // Choose files to exclude from processing, (default: undefined) 
+
+  // Choose files to exclude from processing (default: undefined) 
   exclude: [],
 
   // Determine if node process should be terminated on error (default: false)
@@ -100,10 +103,13 @@ scss({
   sass: require('sass'),
 
   // Run postcss processor before output
-  processor: css => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })]),
+  processor: () => postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })]),
 
   // Process resulting CSS
-  processor: css => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
+  processor: (css, map) => ({ css: css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'), map }),
+
+  // or, just string (for backward compatiblity with v2 or simplicity)
+  processor: (css) => css.replace('/*date*/', '/* ' + new Date().toJSON() + ' */'),
 
   // Add file/folder to be monitored in watch mode so that changes to these files will trigger rebuilds.
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop

@@ -1,6 +1,6 @@
 import scss from '../../index.es.js'
-import postcss from "postcss"
-import autoprefixer from "autoprefixer"
+import postcss from 'postcss'
+import autoprefixer from 'autoprefixer'
 
 export default {
   input: '../input.js',
@@ -13,10 +13,9 @@ export default {
       processor: css => {
         return Promise
           .resolve(
-            postcss([autoprefixer({ overrideBrowserslist: "Edge 18" })])
+            postcss([autoprefixer({ overrideBrowserslist: 'Edge 18' })])
               .process(css, { from: undefined })
           )
-          .then(result => result.css)
       }
     })
   ]

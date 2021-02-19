@@ -14,7 +14,8 @@
     "test:sass": "cd test/sass && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:postcss": "cd test/postcss && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
     "test:processor": "cd test/processor && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cd ../..",
-    "test": "npm run test:node-sass && npm run test:sass && npm run test:processor && npm run test:postcss",
+    "test:sourcemap": "cd test/sourcemap && rm -f output.* && rollup -c && cmp output.js ../expected.js && cmp output.css expected.css && cmp output.css.map expected.css.map && cd ../..",
+    "test": "npm run test:node-sass && npm run test:sass && npm run test:processor && npm run test:postcss && npm run test:sourcemap",
     "testw": "cd test/node-sass && rm -f output.* && rollup -cw; cd ..",
     "prepare": "rollup -c"
   },
@@ -39,13 +40,14 @@
     "index.es.js"
   ],
   "dependencies": {
-    "rollup-pluginutils": "2"
+    "rollup-pluginutils": "^2.3.3"
   },
   "devDependencies": {
     "autoprefixer": "^9.8.6",
     "postcss": "^7.0.32",
     "rollup": "2",
     "rollup-plugin-buble": "0",
+    "node-sass": "5",
     "sass": "^1.26.3",
     "standard": "14"
   }
