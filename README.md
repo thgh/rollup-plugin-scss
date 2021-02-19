@@ -19,21 +19,14 @@
 ## Installation
 
 ```
-# Rollup v0.60+ and v1+
-npm install --save-dev rollup-plugin-scss
+# v3 needs sass installed seperately
+npm install --save-dev rollup-plugin-scss@3 sass
 
-# Rollup v0.59 and below
-npm install --save-dev rollup-plugin-scss@0
-```
+# v3 also supports node-sass [(deprecated since Oct. 2020)](https://sass-lang.com/blog/libsass-is-deprecated)
+npm install --save-dev rollup-plugin-scss@3 node-sass
 
-Since v3, you have to install Sass compiler manually:
-
-```
-# Node Sass (deprecated)
-npm install --save-dev node-sass
-
-# Dart Sass
-npm install --save-dev sass
+# v2 has node-sass included
+npm install --save-dev rollup-plugin-scss@2
 ```
 
 If any of them is installed, it will be used automatically, if both installed `node-sass` will be used.
