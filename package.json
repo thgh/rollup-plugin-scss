@@ -48,8 +48,5 @@
     "rollup-plugin-buble": "0",
     "sass": "^1.26.3",
     "standard": "14"
-  },
-  "optionalDependencies": {
-    "node-sass": "4"
   }
 }

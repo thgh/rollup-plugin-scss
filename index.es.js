@@ -11,12 +11,20 @@ export default function css (options = {}) {
   let includePaths = options.includePaths || ['node_modules/']
   includePaths.push(process.cwd())
 
+  const loadSassLibrary = function () {
+    try {
+      return require('node-sass')
+    } catch (ignored) {
+      return require('sass')
+    }
+  }
+
   const compileToCSS = function (scss) {
     // Compile SASS to CSS
     if (scss.length) {
       includePaths = includePaths.filter((v, i, a) => a.indexOf(v) === i)
       try {
-        const sass = options.sass || require('node-sass')
+        const sass = options.sass || loadSassLibrary()
         const css = sass.renderSync(Object.assign({
           data: prefix + scss,
           includePaths
@@ -45,8 +53,8 @@ export default function css (options = {}) {
           console.log('Line:   ' + e.line)
           console.log('Column: ' + e.column)
         }
-        if (e.message.includes('node-sass') && e.message.includes('find module')) {
-          console.log(green('Solution:\n\t' + 'npm install --save node-sass'))
+        if (e.message.includes('sass') && e.message.includes('find module')) {
+          console.log(green('Solution:\n\t' + 'npm install --save-dev sass' + '\n\tor\n\t' + 'npm install --save-dev node-sass'))
         }
         if (e.message.includes('node-sass') && e.message.includes('bindings')) {
           console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
