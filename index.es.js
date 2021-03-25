@@ -170,7 +170,7 @@ export default function css (options = {}) {
           type: 'asset',
           source: css,
           name: basename(dest),
-          fileName: dest
+          fileName: dest.replace(dirname(opts.dest || opts.file), '').replace(/^\\|\//, '')
         })
       })
     }
