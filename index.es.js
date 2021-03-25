@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, writeFile } from 'fs'
-import { dirname } from 'path'
+import { existsSync, mkdirSync } from 'fs'
+import { dirname, basename } from 'path'
 import { createFilter } from 'rollup-pluginutils'
 
 /*
@@ -166,14 +166,11 @@ export default function css (options = {}) {
         ensureParentDirsSync(dirname(dest))
 
         // Emit styles to file
-        writeFile(dest, css, (err) => {
-          if (opts.verbose !== false) {
-            if (err) {
-              console.error(red(err))
-            } else if (css) {
-              console.log(green(dest), getSize(css.length))
-            }
-          }
+        this.emitFile({
+          type: 'asset',
+          source: css,
+          name: basename(dest),
+          fileName: dest
         })
       })
     }
