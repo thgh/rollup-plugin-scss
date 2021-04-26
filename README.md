@@ -71,11 +71,11 @@ scss({
 
   // Disable any style output or callbacks, import as string
   output: false,
-  
+
   // Choose files to include in processing (default: ['/**/*.css', '/**/*.scss', '/**/*.sass'])
   include: [],
-  
-  // Choose files to exclude from processing, (default: undefined) 
+
+  // Choose files to exclude from processing, (default: undefined)
   exclude: [],
 
   // Determine if node process should be terminated on error (default: false)
@@ -97,6 +97,10 @@ scss({
   // Do not choose a directory where rollup output or dest is pointed to as this will cause an infinite loop
   watch: 'src/styles/components',
   watch: ['src/styles/components', 'src/multiple/folders'],
+
+  // Included paths, which are passed to node-sass. In most cases, you can leave
+  // this option to execute its default, which includes node_modules.
+  includePaths: ['node_modules/']
 })
 ```
 
