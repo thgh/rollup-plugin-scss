@@ -93,6 +93,8 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
 
                 if (existsSync(url)) {
                   resolved = url
+                } else if (existsSync(prev)) {
+                  resolved = prev
                 } else {
                   const finalUrl = url.startsWith('~')
                     ? url.replace('~', '')
