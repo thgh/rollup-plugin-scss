@@ -76,7 +76,32 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
             {
               data: prefix + scss,
               outFile: dest,
-              includePaths
+              includePaths,
+              importer: (
+                url: string,
+                prev: string,
+                done: (
+                  data: { file: string } | { contents: string } | Error | null
+                ) => void
+              ):
+                | { file: string }
+                | { contents: string }
+                | Error
+                | null
+                | void => {
+                let resolved
+
+                if (existsSync(url)) {
+                  resolved = url
+                } else {
+                  const finalUrl = url.startsWith('~')
+                    ? url.replace('~', '')
+                    : url
+                  resolved = require.resolve(finalUrl)
+                }
+
+                return { file: resolved }
+              }
             },
             options
           )
