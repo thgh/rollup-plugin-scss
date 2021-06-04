@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFile } from 'fs'
-import { dirname, resolve } from 'path'
+import { basename, dirname, resolve } from 'path'
 import { createFilter, CreateFilter } from 'rollup-pluginutils'
 
 import type { Plugin } from 'rollup'
@@ -86,23 +86,13 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
                 prev: string,
                 done: ImporterDoneCallback
               ): ImporterReturnType | void => {
-                let resolved
-                const localPath = resolve(prefix + scss, url)
-
-                if (existsSync(localPath)) {
-                  resolved = localPath
-                } else if (existsSync(url)) {
-                  resolved = url
-                } else {
-                  const cleanUrl = url.startsWith('~')
-                    ? url.replace('~', '')
-                    : url
-                  resolved = require.resolve(cleanUrl, {
-                    paths: [prefix + scss]
-                  })
-                }
-
-                return done({ file: resolved })
+                const cleanUrl = url.startsWith('~')
+                  ? url.replace('~', '')
+                  : url
+                const resolved = require.resolve(cleanUrl, {
+                  paths: [prefix + scss]
+                })
+                return resolved ? done({ file: resolved }) : null
               }
             },
             options
