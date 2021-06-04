@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFile } from 'fs'
-import { dirname } from 'path'
+import { dirname, resolve } from 'path'
 import { createFilter, CreateFilter } from 'rollup-pluginutils'
 
 import type { Plugin } from 'rollup'
@@ -22,6 +22,10 @@ export interface CSSPluginOptions {
   verbose?: boolean
   watch?: string | string[]
 }
+
+type ImporterReturnType = { file: string } | { contents: string } | Error | null
+
+type ImporterDoneCallback = (data: ImporterReturnType) => void
 
 type CSS = string | { css: string; map: string }
 
@@ -80,29 +84,25 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
               importer: (
                 url: string,
                 prev: string,
-                done: (
-                  data: { file: string } | { contents: string } | Error | null
-                ) => void
-              ):
-                | { file: string }
-                | { contents: string }
-                | Error
-                | null
-                | void => {
+                done: ImporterDoneCallback
+              ): ImporterReturnType | void => {
                 let resolved
+                const localPath = resolve(prefix + scss, url)
 
-                if (existsSync(url)) {
+                if (existsSync(localPath)) {
+                  resolved = localPath
+                } else if (existsSync(url)) {
                   resolved = url
-                } else if (existsSync(prev)) {
-                  resolved = prev
                 } else {
-                  const finalUrl = url.startsWith('~')
+                  const cleanUrl = url.startsWith('~')
                     ? url.replace('~', '')
                     : url
-                  resolved = require.resolve(finalUrl)
+                  resolved = require.resolve(cleanUrl, {
+                    paths: [prefix + scss]
+                  })
                 }
 
-                return { file: resolved }
+                return done({ file: resolved })
               }
             },
             options
