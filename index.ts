@@ -92,7 +92,7 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
                 const resolved = require.resolve(cleanUrl, {
                   paths: [prefix + scss]
                 })
-                return resolved ? done({ file: resolved }) : null
+                return existsSync(resolved) ? done({ file: resolved }) : null
               }
             },
             options
