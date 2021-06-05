@@ -86,15 +86,43 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
                 prev: string,
                 done: ImporterDoneCallback
               ): ImporterReturnType | void => {
-                if (url.startsWith('.')) return null
+                // If the import begins with '.', it's local...abort. If it
+                // begins with 'url', 'http', or 'https', it's a remote import,
+                // again abort. Note: we only check for 'http' because both
+                // 'http' and 'https' begin with
+                if (
+                  url.startsWith('.') ||
+                  url.startsWith('url') ||
+                  url.startsWith('http')
+                ) {
+                  return null
+                }
 
+                // If the url begins with '~' remove it. The '~' character is a
+                // standard in the sass community when working in JavaScript
+                // because sass-loader used it as an indicator that the import
+                // was a node_modules import (and still does, I think).
                 const cleanUrl = url.startsWith('~')
                   ? url.replace('~', '')
                   : url
+
+                // Have Node resolve the path to the file we're requesting.
+                // When using a plain node_modules project, this works as
+                // expected. When using Yarn PnP, Yarn will unplug the package,
+                // and give the path to the file. Unplugging a file simply
+                // means unzipping it since most packages aren't equipped to
+                // work with zip archives directly. Also, the 'paths' option
+                // tells Yarn what file is requesting this file, so PnP
+                // integrity remains intact. For Node, paths serves as an
+                // additional set of paths to look for the import in.
                 const resolved = require.resolve(cleanUrl, {
                   paths: [prefix + scss]
                 })
-                return resolved ? { file: resolved } : null
+
+                // Finally, return the resolved file...if we can confirm it
+                // exists. If not, you guessed it...abort, and let sass handle
+                // the import
+                return existsSync(resolved) ? { file: resolved } : null
               }
             },
             options
