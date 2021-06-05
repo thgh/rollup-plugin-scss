@@ -86,17 +86,13 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
                 prev: string,
                 done: ImporterDoneCallback
               ): ImporterReturnType | void => {
-                if (url.startsWith('.')) {
-                  return null
-                }
-
                 const cleanUrl = url.startsWith('~')
                   ? url.replace('~', '')
                   : url
                 const resolved = require.resolve(cleanUrl, {
                   paths: [prefix + scss]
                 })
-                return existsSync(resolved) ? done({ file: resolved }) : null
+                return resolved ? { file: resolved } : null
               }
             },
             options
