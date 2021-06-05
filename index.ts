@@ -86,6 +86,10 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
                 prev: string,
                 done: ImporterDoneCallback
               ): ImporterReturnType | void => {
+                if (url.startsWith('.')) {
+                  return null
+                }
+
                 const cleanUrl = url.startsWith('~')
                   ? url.replace('~', '')
                   : url
