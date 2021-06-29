@@ -1,5 +1,5 @@
 import { existsSync, mkdirSync, writeFile } from 'fs'
-import { dirname } from 'path'
+import { basename, dirname, resolve } from 'path'
 import { createFilter, CreateFilter } from 'rollup-pluginutils'
 
 import type { Plugin } from 'rollup'
@@ -22,6 +22,10 @@ export interface CSSPluginOptions {
   verbose?: boolean
   watch?: string | string[]
 }
+
+type ImporterReturnType = { file: string } | { contents: string } | Error | null
+
+type ImporterDoneCallback = (data: ImporterReturnType) => void
 
 type CSS = string | { css: string; map: string }
 
@@ -76,7 +80,69 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
             {
               data: prefix + scss,
               outFile: dest,
-              includePaths
+              includePaths,
+              importer: (
+                url: string,
+                prev: string,
+                done: ImporterDoneCallback
+              ): ImporterReturnType | void => {
+                /* If a path begins with `.`, then it's a local import and this
+                 * importer cannot handle it. This check covers both `.` and
+                 * `..`.
+                 *
+                 * Additionally, if an import path begins with `url` or `http`,
+                 * then it's a remote import, this importer also cannot handle
+                 * that. */
+                if (
+                  url.startsWith('.') ||
+                  url.startsWith('url') ||
+                  url.startsWith('http')
+                ) {
+                  /* The importer returns `null` to defer processing the import
+                   * back to the sass compiler. */
+                  return null
+                }
+
+                /* If the requested path begins with a `~`, we remove it. This
+                 * character is used by webpack-contrib's sass-loader to
+                 * indicate the import is from the node_modules folder. Since
+                 * this is so standard in the JS world, the importer supports
+                 * it, by removing it and ignoring it. */
+                const cleanUrl = url.startsWith('~')
+                  ? url.replace('~', '')
+                  : url
+
+                /* Now, the importer uses `require.resolve()` to attempt
+                 * to resolve the path to the requested file. In the case
+                 * of a standard node_modules project, this will use Node's
+                 * `require.resolve()`. In the case of a Plug 'n Play project,
+                 * this will use the `require.resolve()` provided by the
+                 * package manager.
+                 * 
+                 * This statement is surrounded by a try/catch block because
+                 * if Node or the package manager cannot resolve the requested
+                 * file, they will throw an error, so the importer needs to
+                 * defer to sass, by returning `null`. 
+                 * 
+                 * The paths property tells `require.resolve()` where to begin
+                 * resolution (i.e. who is requesting the file). */
+                try {
+                  const resolved = require.resolve(cleanUrl, {
+                    paths: [prefix + scss]
+                  })
+
+                  /* Since `require.resolve()` will throw an error if a file
+                   * doesn't exist. It's safe to assume the file exists and
+                   * pass it off to the sass compiler. */
+                  return { file: resolved }
+                } catch (e: any) {
+                  /* Just because `require.resolve()` couldn't find the file
+                   * doesn't mean it doesn't exist. It may still be a local
+                   * import that just doesn't list a relative path, so defer
+                   * processing back to sass by returning `null` */
+                  return null
+                }
+              }
             },
             options
           )
