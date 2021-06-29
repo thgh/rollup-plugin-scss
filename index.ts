@@ -118,12 +118,12 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
                  * `require.resolve()`. In the case of a Plug 'n Play project,
                  * this will use the `require.resolve()` provided by the
                  * package manager.
-                 * 
+                 *
                  * This statement is surrounded by a try/catch block because
                  * if Node or the package manager cannot resolve the requested
                  * file, they will throw an error, so the importer needs to
-                 * defer to sass, by returning `null`. 
-                 * 
+                 * defer to sass, by returning `null`.
+                 *
                  * The paths property tells `require.resolve()` where to begin
                  * resolution (i.e. who is requesting the file). */
                 try {
@@ -188,12 +188,7 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
           console.log('Column: ' + e.column)
         }
         if (e.message.includes('sass') && e.message.includes('find module')) {
-          console.log(
-            green(
-              'Solution:\n\t' +
-                'npm install --save-dev sass'
-            )
-          )
+          console.log(green('Solution:\n\t' + 'npm install --save-dev sass'))
         }
         if (e.message.includes('node-sass') && e.message.includes('bindings')) {
           console.log(green('Solution:\n\t' + 'npm rebuild node-sass --force'))
