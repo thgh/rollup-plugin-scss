@@ -4,7 +4,19 @@ All notable changes to `rollup-plugin-scss` will be documented in this file.
 
 ## [Unreleased]
 
+## [3.0.0] - 2021-06-29
+
+### Added
+
+- Add insert option @syJSdev
 - Add `sourceMap` option to enable generation of source map @astappiev
+- Add Yarn PnP support` @eagerestwolf
+- Refactor to Typescript
+- Automated testing using Github Actions
+
+### Updated
+
+- Prefer sass over node-sass
 - A `processor` can receive map as second parameter and return `{ css: string, map?: string }`
 - Remove `node-sass` from optionalDependencies @astappiev <br/>
   **You have to specify `node-sass` or `sass` in your project dependencies alongside `rollup-plugin-scss`**
