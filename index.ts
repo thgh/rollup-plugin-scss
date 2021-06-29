@@ -191,9 +191,7 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
           console.log(
             green(
               'Solution:\n\t' +
-                'npm install --save-dev sass' +
-                '\n\tor\n\t' +
-                'npm install --save-dev node-sass'
+                'npm install --save-dev sass'
             )
           )
         }
@@ -349,9 +347,9 @@ const insertStyleFn = `function insertStyleFn(css) {
 
 function loadSassLibrary(): SassRenderer {
   try {
-    return require('node-sass')
-  } catch (e) {
     return require('sass')
+  } catch (e) {
+    return require('node-sass')
   }
 }
 

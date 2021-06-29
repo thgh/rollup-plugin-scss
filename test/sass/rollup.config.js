@@ -1,5 +1,4 @@
 import scss from '../../index.es.js'
-import sass from 'sass'
 
 export default {
   input: '../input.js',
@@ -7,5 +6,5 @@ export default {
     file: 'output.js',
     format: 'esm'
   },
-  plugins: [scss({ sass })]
+  plugins: [scss()]
 }

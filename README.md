@@ -19,17 +19,14 @@
 ## Installation
 
 ```
-# v3 needs sass installed seperately
+# v3 needs sass installed seperately (or node-sass)
 npm install --save-dev rollup-plugin-scss@3 sass
 
-# v3 also supports node-sass [(deprecated since Oct. 2020)](https://sass-lang.com/blog/libsass-is-deprecated)
-npm install --save-dev rollup-plugin-scss@3 node-sass
-
-# v2 has node-sass included
+# v2 has node-sass included (with option to use sass)
 npm install --save-dev rollup-plugin-scss@2
 ```
 
-If any of them is installed, it will be used automatically, if both installed `node-sass` will be used.
+If any of them is installed, it will be used automatically, if both installed `sass` will be used.
 
 ## Usage
 
@@ -94,10 +91,10 @@ scss({
   // Prefix global scss. Useful for variables and mixins.
   prefix: `@import "./fonts.scss";`,
 
-  // A Sass (node-sass compatible) compiler to use
-  // - node-sass and sass packages are picked up automatically
+  // A Sass (sass compatible) compiler to use
+  // - sass and node-sass packages are picked up automatically
   // - you can use this option to specify custom package (e.g. a fork of one of them)
-  sass: require('sass'),
+  sass: require('node-sass'),
 
   // Run postcss processor before output
   processor: () => postcss([autoprefixer({ overrideBrowserslist: 'Edge 18' })]),

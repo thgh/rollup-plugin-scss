@@ -1,9 +1,1 @@
-{
-	"version": 3,
-	"file": "output.css",
-	"sources": [
-		"stdin"
-	],
-	"names": [],
-	"mappings": "AAAA,AAEI,OAFG,CACL,OAAO,CACL,KAAK,CAAC;EACJ,KAAK,EAAE,KAAK;EACZ,WAAW,EAAE,IAAI,GAClB"
-}
+{"version":3,"sourceRoot":"","sources":["stdin"],"names":[],"mappings":"AAEI;EACE;EACA","file":"output.css"}
