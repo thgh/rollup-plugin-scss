@@ -72,6 +72,10 @@ scss({
   // Disable any style output or callbacks, import as string
   output: false,
   
+  // An array of paths to resolve @import from (default: ["node_modules"]);
+  // in the context of a monorepo you might want to include more paths.
+  includePaths: ["node_modules", "../../node_modules"],
+  
   // Choose files to include in processing (default: ['/**/*.css', '/**/*.scss', '/**/*.sass'])
   include: [],
   
