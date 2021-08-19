@@ -21,6 +21,7 @@ export interface CSSPluginOptions {
   sourceMap?: boolean
   verbose?: boolean
   watch?: string | string[]
+  outputStyle?: string
 }
 
 type ImporterReturnType = { file: string } | { contents: string } | Error | null
