@@ -49,7 +49,7 @@
     "@types/node-sass": "^4.11.1",
     "@types/sass": "^1.16.0",
     "autoprefixer": "^9.8.6",
-    "node-sass": "5",
+    "node-sass": "7",
     "postcss": "^7.0.32",
     "prettier": "2",
     "rollup": "2",
