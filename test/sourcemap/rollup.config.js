@@ -6,9 +6,5 @@ export default {
     file: 'output.js',
     format: 'esm'
   },
-  plugins: [
-    scss({
-      sourceMap: true
-    })
-  ]
+  plugins: [scss({ fileName: 'nested/output.css', sourceMap: true })]
 }

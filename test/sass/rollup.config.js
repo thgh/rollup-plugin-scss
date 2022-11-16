@@ -3,8 +3,9 @@ import scss from '../../index.es.js'
 export default {
   input: '../input.js',
   output: {
-    file: 'output.js',
-    format: 'esm'
+    file: 'nested/output.js',
+    format: 'esm',
+    assetFileNames: '[name][extname]'
   },
   plugins: [scss()]
 }

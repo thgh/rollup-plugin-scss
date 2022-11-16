@@ -19,11 +19,11 @@
 ## Installation
 
 ```
-# v3 needs sass installed seperately (or node-sass)
+# v4 uses the rollup asset system
 npm install --save-dev rollup-plugin-scss@3 sass
 
-# v2 has node-sass included (with option to use sass)
-npm install --save-dev rollup-plugin-scss@2
+# v3 needs sass installed seperately (or node-sass)
+npm install --save-dev rollup-plugin-scss@3 sass
 ```
 
 If any of them is installed, it will be used automatically, if both installed `sass` will be used.
@@ -38,10 +38,32 @@ export default {
   input: 'input.js',
   output: {
     file: 'output.js',
-    format: 'esm'
+    format: 'esm',
+    // Removes the hash from the asset filename
+    assetFileNames: '[name][extname]'
   },
   plugins: [
     scss() // will output compiled styles to output.css
+  ]
+}
+
+// OR
+
+export default {
+  input: 'input.js',
+  output: { file: 'output.js', format: 'esm' },
+  plugins: [
+    scss({ fileName: 'bundle.css' }) // will output compiled styles to "bundle.css"
+  ]
+}
+
+// OR
+
+export default {
+  input: 'input.js',
+  output: { file: 'output.js', format: 'esm' },
+  plugins: [
+    scss() // will output compiled styles to "assets/output-123hash.css"
   ]
 }
 ```
@@ -59,12 +81,11 @@ By default the plugin will base the filename for the css on the bundle destinati
 
 ```js
 scss({
-  // Choose *one* of these possible "output:..." options
-  // Default behaviour is to write all styles to the bundle destination where .js is replaced by .css
-  output: true,
+  // Defaults to output.css, Rollup may add a hash to this!
+  name: 'output.css',
 
-  // Filename to write all styles to
-  output: 'bundle.css',
+  // Literal asset filename, bypasses the automated filenaming transformations
+  fileName: 'output.css',
 
   // Callback that will be called ongenerate with two arguments:
   // - styles: the contents of all style tags combined: 'body { color: green }'

@@ -10,6 +10,7 @@ export default {
   },
   plugins: [
     scss({
+      fileName: 'output.css',
       processor: css => {
         return Promise.resolve(
           postcss([

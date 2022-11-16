@@ -7,5 +7,5 @@ export default {
     file: 'output.js',
     format: 'esm'
   },
-  plugins: [scss({ sass })]
+  plugins: [scss({ fileName: 'output.css', sass })]
 }

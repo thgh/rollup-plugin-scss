@@ -1,5 +1,4 @@
-import { existsSync, mkdirSync } from 'fs'
-import { basename, dirname } from 'path'
+import { dirname } from 'path'
 import { createFilter, CreateFilter } from 'rollup-pluginutils'
 
 import type { Plugin } from 'rollup'
@@ -7,9 +6,14 @@ import type { Plugin } from 'rollup'
 export interface CSSPluginOptions {
   exclude?: Parameters<CreateFilter>[1]
   failOnError?: boolean
+  /** Literal asset filename, bypasses any hashes in the filename */
+  fileName?: string
   include?: Parameters<CreateFilter>[0]
   includePaths?: string[]
   insert?: boolean
+  /** Asset name, defaults to output.css, Rollup may add a hash to this! Check out RollupConfig.output.assetFileNames */
+  name?: string
+  /** @deprecated Use `fileName` instead, currently still available for backwards compatibility */
   output?: string | false | ((css: string, styles: Styles) => void)
   prefix?: string
   processor?: (
@@ -61,10 +65,13 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
     options.include || ['/**/*.css', '/**/*.scss', '/**/*.sass'],
     options.exclude
   )
-  let dest = typeof options.output === 'string' ? options.output : null
   const insertStyleFnName = '___$insertStylesToHeader'
 
   const styles: Styles = {}
+  const fileName =
+    options.fileName ||
+    (options.output === 'string' ? options.output : undefined)
+  const name = options.name || 'output.css'
   const prefix = options.prefix ? options.prefix + '\n' : ''
   let includePaths = options.includePaths || ['node_modules/']
   includePaths.push(process.cwd())
@@ -80,7 +87,7 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
           Object.assign(
             {
               data: prefix + scss,
-              outFile: dest,
+              outFile: fileName || name,
               includePaths,
               importer: (
                 url: string,
@@ -165,7 +172,7 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
             return Promise.resolve(
               postcss.process(css, {
                 from: undefined,
-                to: dest,
+                to: fileName || name,
                 map: map ? { prev: map, inline: false } : null
               })
             )
@@ -177,7 +184,7 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
           return stringToCSS(output)
         }
         return { css, map }
-      } catch (e) {
+      } catch (e: any) {
         if (options.failOnError) {
           throw e
         }
@@ -263,15 +270,6 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
         scss += styles[id] || ''
       }
 
-      if (typeof dest !== 'string') {
-        // Guess destination filename
-        dest = opts.file || 'bundle.js'
-        if (dest.endsWith('.js')) {
-          dest = dest.slice(0, -3)
-        }
-        dest = dest + '.css'
-      }
-
       const compiled = await compileToCSS(scss)
 
       if (typeof compiled !== 'object' || typeof compiled.css !== 'string') {
@@ -289,16 +287,13 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
         return
       }
 
-      // Ensure that dest parent folders exist (create the missing ones)
-      ensureParentDirsSync(dirname(dest))
-
       // Emit styles to file
       this.emitFile({
         type: 'asset',
         source: compiled.css,
-        name: basename(dest),
-        fileName: dest.replace(dirname(opts.dest || opts.file), '').replace(/^\\|\//, ''),
-      });
+        name,
+        fileName
+      })
 
       if (options.sourceMap && compiled.map) {
         let sourcemap = compiled.map
@@ -309,9 +304,9 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
         this.emitFile({
           type: 'asset',
           source: sourcemap,
-          name: basename(dest),
-          fileName: dest.replace(dirname(opts.dest || opts.file), '').replace(/^\\|\//, '') + '.map',
-        });
+          name: name && name + '.map',
+          fileName: fileName && fileName + '.map'
+        })
       }
     }
   }
@@ -368,19 +363,4 @@ function getSize(bytes: number) {
     : bytes < 1024000
     ? (bytes / 1024).toPrecision(3) + ' kB'
     : (bytes / 1024 / 1024).toPrecision(4) + ' MB'
-}
-
-function ensureParentDirsSync(dir: string) {
-  if (existsSync(dir)) {
-    return
-  }
-
-  try {
-    mkdirSync(dir)
-  } catch (err) {
-    if (err.code === 'ENOENT') {
-      ensureParentDirsSync(dirname(dir))
-      ensureParentDirsSync(dir)
-    }
-  }
 }
