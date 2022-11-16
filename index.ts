@@ -1,5 +1,5 @@
-import { existsSync, mkdirSync, writeFile } from 'fs'
-import { basename, dirname, resolve } from 'path'
+import { existsSync, mkdirSync } from 'fs'
+import { basename, dirname } from 'path'
 import { createFilter, CreateFilter } from 'rollup-pluginutils'
 
 import type { Plugin } from 'rollup'
@@ -293,15 +293,12 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
       ensureParentDirsSync(dirname(dest))
 
       // Emit styles to file
-      writeFile(dest, compiled.css, err => {
-        if (options.verbose !== false) {
-          if (err) {
-            console.error(red(err.toString()))
-          } else if (compiled.css) {
-            console.log(green(dest || '?'), getSize(compiled.css.length))
-          }
-        }
-      })
+      this.emitFile({
+        type: 'asset',
+        source: compiled.css,
+        name: basename(dest),
+        fileName: dest.replace(dirname(opts.dest || opts.file), '').replace(/^\\|\//, ''),
+      });
 
       if (options.sourceMap && compiled.map) {
         let sourcemap = compiled.map
@@ -309,11 +306,12 @@ export default function scss(options: CSSPluginOptions = {}): Plugin {
           sourcemap = compiled.map.toString()
         }
 
-        writeFile(dest + '.map', sourcemap, err => {
-          if (options.verbose !== false && err) {
-            console.error(red(err.toString()))
-          }
-        })
+        this.emitFile({
+          type: 'asset',
+          source: sourcemap,
+          name: basename(dest),
+          fileName: dest.replace(dirname(opts.dest || opts.file), '').replace(/^\\|\//, '') + '.map',
+        });
       }
     }
   }
