@@ -19,11 +19,7 @@
 ## Installation
 
 ```
-# v4 uses the rollup asset system
-npm install --save-dev rollup-plugin-scss@3 sass
-
-# v3 needs sass installed seperately (or node-sass)
-npm install --save-dev rollup-plugin-scss@3 sass
+npm install --save-dev rollup-plugin-scss sass
 ```
 
 If any of them is installed, it will be used automatically, if both installed `sass` will be used.
