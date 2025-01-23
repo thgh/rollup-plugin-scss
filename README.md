@@ -22,8 +22,6 @@
 npm install --save-dev rollup-plugin-scss sass
 ```
 
-If any of them is installed, it will be used automatically, if both installed `sass` will be used.
-
 ## Usage
 
 ```js
